@@ -23,7 +23,11 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.ToListAsync();
+            return await queryable.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
         }
 
         public async Task<(List<Course>, long)> GetAllCourseSearch(Course Course, int pageNumber, int pageSize, string sortField, int sortOrder)
@@ -83,7 +87,11 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            var courses = await queryable.ToListAsync();
+            var courses = await queryable.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
 
             return (courses, totalOrigin);
         }
@@ -99,7 +107,11 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             if (queryable.Any())
             {
-                var results = await queryable.Include(x => x.Provider).ToListAsync();
+                var results = await queryable.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
 
                 return results;
             }
