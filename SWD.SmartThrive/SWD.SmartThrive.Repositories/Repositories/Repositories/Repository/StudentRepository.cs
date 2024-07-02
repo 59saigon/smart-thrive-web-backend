@@ -44,7 +44,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.Include(m => m.Packages)
+            return await queryable.Include(m => m.Packages).Include(m => m.User)
                 .ToListAsync();
         }
 
@@ -76,7 +76,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            var providers = await queryable.Include(m => m.Packages)
+            var providers = await queryable.Include(m => m.Packages).Include(m => m.User)
                 .ToListAsync();
 
             return (providers, totalOrigin);
@@ -86,8 +86,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
         {
             var queryable = base.GetQueryable(m => m.UserId == id);
 
-            return await queryable.Include(m => m.Packages)
-                .ToListAsync(); ;
+            return await queryable.Include(m => m.Packages).Include(m => m.User)
+                .ToListAsync();
         }
     }
 
