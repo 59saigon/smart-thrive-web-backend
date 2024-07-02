@@ -44,7 +44,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.ToListAsync();
+            return await queryable.Include(m => m.Packages)
+                .ToListAsync();
         }
 
         public async Task<(List<Student>, long)> Search(Student student, int pageNumber, int pageSize, string sortField, int sortOrder)
@@ -75,15 +76,18 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            var providers = await queryable.ToListAsync();
+            var providers = await queryable.Include(m => m.Packages)
+                .ToListAsync();
 
             return (providers, totalOrigin);
         }
 
         public async Task<List<Student>> GetStudentsByUserId(Guid id)
         {
-            var students = await _context.Students.Where(s => s.UserId == id).ToListAsync();
-            return students;
+            var queryable = base.GetQueryable(m => m.UserId == id);
+
+            return await queryable.Include(m => m.Packages)
+                .ToListAsync(); ;
         }
     }
 
