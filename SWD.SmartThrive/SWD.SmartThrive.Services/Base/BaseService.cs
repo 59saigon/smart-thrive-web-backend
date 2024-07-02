@@ -51,6 +51,7 @@ namespace SWD.SmartThrive.Services.Base
             var user = await GetUserInfo();
             if (user != null)
             {
+                entity.Id = Guid.NewGuid();
                 entity.CreatedBy = user.Email;
                 entity.CreatedDate = DateTime.UtcNow;
                 entity.LastUpdatedBy = user.Email;
