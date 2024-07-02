@@ -38,7 +38,10 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             queryable = queryable.Include(entity => entity.Role);
             
 
-            var result = await queryable.Include(m => m.Students).SingleOrDefaultAsync();
+            var result = await queryable
+                .Include(m => m.Role)
+                .Include(m => m.Location)
+                .Include(m => m.Students).SingleOrDefaultAsync();
 
             return result;
         }
@@ -50,7 +53,10 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.Include(m => m.Students).ToListAsync();
+            return await queryable
+                .Include(m => m.Role)
+                .Include(m => m.Location)
+                .Include(m => m.Students).ToListAsync();
         }
 
         public async Task<(List<User>, long)> GetAllUserSearch(User user, int pageNumber, int pageSize, string sortField, int sortOrder)
@@ -116,7 +122,10 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            var users = await queryable.Include(m => m.Students).ToListAsync();
+            var users = await queryable
+                .Include(m => m.Role)
+                .Include(m => m.Location)
+                .Include(m => m.Students).ToListAsync();
 
             return (users, totalOrigin);
         }
