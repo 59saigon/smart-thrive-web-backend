@@ -15,5 +15,6 @@ namespace SWD.SmartThrive.Services.Services.Interface
         public Task<(List<PackageModel>?, long)> Search(PackageModel packageModel, int pageNumber, int pageSize, string sortField, int sortOrder);
 
         public Task<long> GetTotalCount();
+        Task<List<PackageModel>?> GetAllPackageByStudentId(Guid idStudent);
     }
 }

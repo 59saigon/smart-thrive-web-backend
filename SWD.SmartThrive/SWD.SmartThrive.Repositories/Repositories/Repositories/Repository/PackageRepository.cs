@@ -30,6 +30,13 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<Package>> GetAllPackageByStudentId(Guid id)
+        {
+            var queryable = await GetQueryable(x => x.StudentId == id).ToListAsync();
+            
+            return queryable;
+        }
+
         public async Task<(List<Package>, long)> Search(Package Package, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);

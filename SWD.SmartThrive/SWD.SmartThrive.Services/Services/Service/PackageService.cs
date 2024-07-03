@@ -76,21 +76,30 @@ namespace SWD.SmartThrive.Services.Services.Service
         }
 
         public async Task<List<PackageModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
+        {
+            var pacakges = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
+
+            if (!pacakges.Any())
             {
-                var pacakges = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
-
-                if (!pacakges.Any())
-                {
-                    return null;
-                }
-
-                return _mapper.Map<List<PackageModel>>(pacakges);
-
+                return null;
             }
 
-        
-        public async Task<(List<PackageModel>?, long)> Search(PackageModel packageModel, int pageNumber, int pageSize, string sortField, int sortOrder)
+            return _mapper.Map<List<PackageModel>>(pacakges);
+
+        }
+
+        public async Task<List<PackageModel>?> GetAllPackageByStudentId(Guid idStudent)
+        {
+            var packagesByStudentId = await _repository.GetAllPackageByStudentId(idStudent);
+            if (!packagesByStudentId.Any())
             {
+                return null;
+            }
+            return _mapper.Map<List<PackageModel>>(packagesByStudentId);
+        }
+
+        public async Task<(List<PackageModel>?, long)> Search(PackageModel packageModel, int pageNumber, int pageSize, string sortField, int sortOrder)
+        {
             var packages = _mapper.Map<Package>(packageModel);
             var packageWithTotalOrigin = await _repository.Search(packages, pageNumber, pageSize, sortField, sortOrder);
 
@@ -102,6 +111,6 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return (courseModels, packageWithTotalOrigin.Item2);
         }
-        
+
     }
 }
