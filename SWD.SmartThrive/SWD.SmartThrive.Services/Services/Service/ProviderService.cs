@@ -61,11 +61,11 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
         }
 
-        public async Task<List<ProviderModel>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<ProviderModel>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             try
             {
-                return _mapper.Map<List<ProviderModel>>(await _providerRepository.GetAllPaginationWithOrder(pageNumber, pageSize, sortField, sortOrder));
+                return _mapper.Map<List<ProviderModel>>(await _providerRepository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder));
             }
             catch (Exception ex)
             {
@@ -73,17 +73,16 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
         }
 
-        public async Task<ProviderModel> GetById(Guid id)
+        public async Task<ProviderModel?> GetById(Guid id)
         {
-            try
+            var package = await _providerRepository.GetById(id);
+
+            if (package == null)
             {
-                var provider = await _providerRepository.GetById(id);
-                return _mapper.Map<ProviderModel>(provider);
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<ProviderModel>(package);
         }
 
         public async Task<(List<ProviderModel>?, long)> Search(ProviderModel providerModel, int pageNumber, int pageSize, string sortField, int sortOrder)

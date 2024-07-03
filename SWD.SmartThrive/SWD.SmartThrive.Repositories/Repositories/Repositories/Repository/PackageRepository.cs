@@ -16,17 +16,21 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             _context = context;
         }
 
-        public async Task<List<Package>> GetAllPackage(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<Package>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.ToListAsync();
+            return await queryable
+                .Include(m => m.Student)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Orders)
+                .ToListAsync();
         }
 
-        public async Task<(List<Package>, long)> GetAllPackageSearch(Package Package, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<(List<Package>, long)> Search(Package Package, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -53,43 +57,25 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            var pacakges = await queryable.ToListAsync();
+            var pacakges = await queryable
+                .Include(m => m.Student)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Orders)
+                .ToListAsync();
 
             return (pacakges, totalOrigin);
         }
 
-        public IQueryable<Package> GetQueryablePaginationWithSortField(string sortField)
+        public async Task<Package?> GetById(Guid id)
         {
-            // Sắp xếp trước 
-            var queryable = base.GetQueryable();
+            var query = GetQueryable(m => m.Id == id);
+            var user = await query
+                .Include(m => m.Student)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Orders)
+                .SingleOrDefaultAsync();
 
-            if (queryable.Any())
-            {
-                switch (sortField.ToLower())
-                {
-                    case "packagename":
-                        queryable = queryable.OrderBy(o => o.PackageName);
-                        break;
-                    case "startdate":
-                        queryable = queryable.OrderBy(o => o.StartDate);
-                        break;
-                    case "endate":
-                        queryable = queryable.OrderBy(o => o.EndDate);
-                        break;
-                    case "quantity":
-                        queryable = queryable.OrderBy(o => o.QuantityCourse);
-                        break;
-                    case "totalprice":
-                        queryable = queryable.OrderBy(o => o.TotalPrice);
-                        break;
-
-                    default:
-                        queryable = queryable.OrderBy(o => o.Id);
-                        break;
-                }
-            }
-
-            return queryable;
+            return user;
         }
     }
 }

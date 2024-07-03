@@ -16,17 +16,17 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             _context = context;
         }
 
-        public async Task<List<Order>> GetAllOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<Order>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-            return await queryable.ToListAsync();
+            return await queryable.Include(m => m.Package).ToListAsync();
         }
 
-        public async Task<(List<Order>, long)> GetAllOrderSearch(Order Order, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<(List<Order>, long)> Search(Order Order, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -48,10 +48,20 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 // Lọc theo trang
                 queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
 
-                var orders = await queryable.ToListAsync();
+                var orders = await queryable.Include(m => m.Package).ToListAsync();
 
                 return (orders, totalOrigin);
             
+        }
+
+        public async Task<Order> GetById(Guid id)
+        {
+            var query = GetQueryable(m => m.Id == id);
+            var order = await query
+                .Include(m => m.Package)
+                .SingleOrDefaultAsync();
+
+            return order;
         }
     }
 }

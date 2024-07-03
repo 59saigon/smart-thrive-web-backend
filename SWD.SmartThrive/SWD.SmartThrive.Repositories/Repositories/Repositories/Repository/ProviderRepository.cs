@@ -12,31 +12,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
         {
         }
 
-        public IQueryable<Provider> GetQueryablePaginationWithSortField(string sortField)
-        {
-            // Sắp xếp trước 
-            var queryable = base.GetQueryable();
-
-            if (queryable.Any())
-            {
-                switch (sortField.ToLower())
-                {
-                    case "website":
-                        queryable = queryable.OrderBy(o => o.Website);
-                        break;
-                    case "companyname":
-                        queryable = queryable.OrderBy(o => o.CompanyName);
-                        break;
-                    default:
-                        queryable = queryable.OrderBy(o => o.Id);
-                        break;
-                }
-            }
-
-            return queryable;
-        }
-
-        public async Task<List<Provider>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<Provider>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -76,6 +52,17 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             var providers = await queryable.Include(m => m.User).Include(m => m.Courses).ToListAsync();
 
             return (providers, totalOrigin);
+        }
+
+        public async Task<Provider> GetById(Guid id)
+        {
+            var query = GetQueryable(m => m.Id == id);
+            var provider = await query
+                .Include(m => m.User)
+                .Include(m => m.Courses)
+                .SingleOrDefaultAsync();
+
+            return provider;
         }
     }
 }

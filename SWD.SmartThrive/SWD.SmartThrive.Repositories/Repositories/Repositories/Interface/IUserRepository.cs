@@ -6,7 +6,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
     public interface IUserRepository : IBaseRepository<User>
     {
         Task<User> FindUsernameOrEmail(User user);
-        Task<List<User>> GetAllUser(int pageNumber, int pageSize, string sortField, int sortOrder);
-        Task<(List<User>, long)> GetAllUserSearch(User user, int pageNumber, int pageSize, string sortField, int sortOrder);
+        Task<List<User>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder);
+        Task<User> GetById(Guid id);
+        Task<(List<User>, long)> Search(User user, int pageNumber, int pageSize, string sortField, int sortOrder);
     }
 }

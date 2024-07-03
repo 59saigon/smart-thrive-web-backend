@@ -12,10 +12,10 @@ namespace SWD.SmartThrive.Services.Services.Interface
     {
         Task<bool> Add(SubjectModel model);
         Task<bool> Update(SubjectModel model);
-        Task<bool> Delete(SubjectModel model);
-        Task<List<SubjectModel>> GetAll();
-        Task<List<SubjectModel>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder);
-        Task<SubjectModel> GetById(Guid id);
+        Task<bool> Delete(Guid id);
+        Task<List<SubjectModel>?> GetAll();
+        Task<List<SubjectModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder);
+        Task<SubjectModel?> GetById(Guid id);
         Task<List<SubjectModel>> GetByCategoryId(Guid id);
         Task<(List<SubjectModel>?, long)> Search(SubjectModel model, int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<long> GetTotalCount();

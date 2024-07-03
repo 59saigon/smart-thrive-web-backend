@@ -25,28 +25,23 @@ namespace SWD.SmartThrive.Services.Services.Service
         }
         public async Task<bool> Add(CategoryModel model)
         {
-            try
-            {
-                var category = _mapper.Map<Category>(model);
-                var setCategory = await SetBaseEntityToCreateFunc(category);
-                return await _repository.Add(setCategory);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var category = _mapper.Map<Category>(model);
+            var setCategory = await SetBaseEntityToCreateFunc(category);
+
+            return await _repository.Add(setCategory);
         }
 
-        public async Task<bool> Delete(CategoryModel model)
+        public async Task<bool> Delete(Guid id)
         {
-            try
+            var entity = await _repository.GetById(id);
+
+            if (entity == null)
             {
-                return await _repository.Delete(_mapper.Map<Category>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            var category = _mapper.Map<Category>(entity);
+            return await _repository.Delete(category);
         }
 
         public async Task<(List<CategoryModel>?, long)> Search(CategoryModel model, int pageNumber, int pageSize, string sortField, int sortOrder)
@@ -65,44 +60,52 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Update(CategoryModel model)
         {
-            try
+            var entity = await _repository.GetById(model.Id);
+
+            if (entity == null)
             {
-                return await _repository.Update(_mapper.Map<Category>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            _mapper.Map(model, entity);
+            entity = await SetBaseEntityToUpdateFunc(entity);
+
+            return await _repository.Update(entity);
         }
 
-        public async Task<List<CategoryModel>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<CategoryModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            try
+            var categories = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
+            
+            if (!categories.Any())
             {
-                return _mapper.Map<List<CategoryModel>>(await _repository.GetAllPaginationWithOrder(pageNumber, pageSize, sortField, sortOrder));
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<List<CategoryModel>>(categories);
         }
 
-        public async Task<CategoryModel> GetById(Guid id)
+        public async Task<CategoryModel?> GetById(Guid id)
         {
-            try
+            var category = await _repository.GetById(id);
+
+            if (category == null)
             {
-                var subject = await _repository.GetById(id);
-                return _mapper.Map<CategoryModel>(subject);
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<CategoryModel>(category);
         }
 
         public async Task<List<CategoryModel>> GetAll()
         {
-            return _mapper.Map<List<CategoryModel>>(await _repository.GetAll());
+            var categories = await _repository.GetAll();
+
+            if (!categories.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<CategoryModel>>(categories);
         }
 
     }

@@ -36,7 +36,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             _configuration = configuration;
         }
 
-        public async Task<bool> AddUser(UserModel userModel)
+        public async Task<bool> Add(UserModel userModel)
         {
             var user = _mapper.Map<User>(userModel);
             var setUser = await SetBaseEntityToCreateFunc(user);
@@ -44,7 +44,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             return await _repository.Add(setUser);
         }
 
-        public async Task<bool> UpdateUser(UserModel userModel)
+        public async Task<bool> Update(UserModel userModel)
         {
             var entity = await _repository.GetById(userModel.Id);
 
@@ -55,11 +55,10 @@ namespace SWD.SmartThrive.Services.Services.Service
             _mapper.Map(userModel, entity);
             entity = await SetBaseEntityToUpdateFunc(entity);
 
-            var user = _mapper.Map<User>(userModel);
-            return await _repository.Update(user);
+            return await _repository.Update(entity);
         }
 
-        public async Task<bool> DeleteUser(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await _repository.GetById(id);
 
@@ -74,7 +73,7 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<List<UserModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            var users = await _repository.GetAllUser(pageNumber, pageSize, sortField, sortOrder);
+            var users = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
             
             if (!users.Any())
             {
@@ -96,10 +95,10 @@ namespace SWD.SmartThrive.Services.Services.Service
             return _mapper.Map<List<UserModel>>(users);
         }
 
-        public async Task<(List<UserModel>?, long)> GetAllUserSearch(UserModel userModel, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<(List<UserModel>?, long)> Search(UserModel userModel, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var user = _mapper.Map<User>(userModel);
-            var usersWithTotalOrigin = await _repository.GetAllUserSearch(user, pageNumber, pageSize, sortField, sortOrder);
+            var usersWithTotalOrigin = await _repository.Search(user, pageNumber, pageSize, sortField, sortOrder);
 
             if (!usersWithTotalOrigin.Item1.Any())
             {
@@ -110,17 +109,10 @@ namespace SWD.SmartThrive.Services.Services.Service
             return (userModels, usersWithTotalOrigin.Item2);
         }
 
-        public async Task<UserModel> GetUser(Guid id)
+        public async Task<UserModel?> GetById(Guid id)
         {
-            // get user by id to get list student relate
-            var query = _repository.GetQueryable();
-
-            query = query.Where(m => m.Id == id);
-
-            query = query.Include(m => m.Students);
-
-            var user = await _repository.GetById(id);
-
+            var user = await _repository.GetById(id);  
+            
             if (user == null)
             {
                 return null;
@@ -161,10 +153,7 @@ namespace SWD.SmartThrive.Services.Services.Service
         {
             userModel.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
             
-            // get Role id by role name
-            
-
-            bool isUser = await AddUser(userModel);
+            bool isUser = await Add(userModel);
 
             UserModel _userModel = await GetUserByEmailOrUsername(userModel);
 

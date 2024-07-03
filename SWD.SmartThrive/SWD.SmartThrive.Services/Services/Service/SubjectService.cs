@@ -37,16 +37,17 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
         }
 
-        public async Task<bool> Delete(SubjectModel model)
+        public async Task<bool> Delete(Guid id)
         {
-            try
+            var entity = await _subjectRepository.GetById(id);
+
+            if (entity == null)
             {
-                return await _subjectRepository.Delete(_mapper.Map<Subject>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            var subject = _mapper.Map<Subject>(entity);
+            return await _subjectRepository.Delete(subject);
         }
 
         public async Task<(List<SubjectModel>?, long)> Search(SubjectModel model, int pageNumber, int pageSize, string sortField, int sortOrder)
@@ -65,39 +66,40 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Update(SubjectModel model)
         {
-            try
+            var entity = await _subjectRepository.GetById(model.Id);
+
+            if (entity == null)
             {
-                return await _subjectRepository.Update(_mapper.Map<Subject>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            _mapper.Map(model, entity);
+            entity = await SetBaseEntityToUpdateFunc(entity);
+
+            return await _subjectRepository.Update(entity);
         }
 
-        public async Task<List<SubjectModel>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<SubjectModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            try
+            var subjects = await _subjectRepository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
+
+            if (!subjects.Any())
             {
-                return _mapper.Map<List<SubjectModel>>(await _subjectRepository.GetAllPaginationWithOrder(pageNumber, pageSize, sortField, sortOrder));
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<List<SubjectModel>>(subjects);
         }
 
-        public async Task<SubjectModel> GetById(Guid id)
+        public async Task<SubjectModel?> GetById(Guid id)
         {
-            try
+            var subjects = await _subjectRepository.GetById(id);
+
+            if (subjects == null)
             {
-                var subject = await _subjectRepository.GetById(id);
-                return _mapper.Map<SubjectModel>(subject);
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<SubjectModel>(subjects);
         }
 
         public async Task<List<SubjectModel>> GetByCategoryId(Guid id)
@@ -113,9 +115,16 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
         }
 
-        public async Task<List<SubjectModel>> GetAll()
+        public async Task<List<SubjectModel>?> GetAll()
         {
-            return _mapper.Map<List<SubjectModel>>(await _subjectRepository.GetAll());
+            var students = await _subjectRepository.GetAll();
+
+            if (!students.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<SubjectModel>>(students);
         }
     }
 }

@@ -18,14 +18,14 @@ namespace SWD.SmartThrive.Services.Services.Service
             _repository = unitOfWork.PackageRepository;
         }
 
-        public async Task<bool> AddPackage(PackageModel PackageModel)
+        public async Task<bool> Add(PackageModel PackageModel)
         {
             var Package = _mapper.Map<Package>(PackageModel);
             var package = await SetBaseEntityToCreateFunc(Package);
             return await _repository.Add(package);
         }
 
-        public async Task<bool> UpdatePackage(PackageModel packageModel)
+        public async Task<bool> Update(PackageModel packageModel)
         {
             var entity = await _repository.GetById(packageModel.Id);
 
@@ -39,7 +39,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             return await _repository.Update(entity);
         }
 
-        public async Task<bool> DeletePackage(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await _repository.GetById(id);
             if (entity == null)
@@ -51,7 +51,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             return await _repository.Delete(Package);
         }
 
-        public async Task<List<PackageModel>> GetAllPackage()
+        public async Task<List<PackageModel>> GetAll()
         {
             var Packages = await _repository.GetAll();
 
@@ -63,7 +63,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             return _mapper.Map<List<PackageModel>>(Packages);
         }
 
-        public async Task<PackageModel> GetPackage(Guid id)
+        public async Task<PackageModel?> GetById(Guid id)
         {
             var Package = await _repository.GetById(id);
 
@@ -77,7 +77,7 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<List<PackageModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
             {
-                var pacakges = await _repository.GetAllPackage(pageNumber, pageSize, sortField, sortOrder);
+                var pacakges = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
 
                 if (!pacakges.Any())
                 {
@@ -89,10 +89,10 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
 
         
-        public async Task<(List<PackageModel>?, long)> GetAllPackageSearch(PackageModel packageModel, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<(List<PackageModel>?, long)> Search(PackageModel packageModel, int pageNumber, int pageSize, string sortField, int sortOrder)
             {
             var packages = _mapper.Map<Package>(packageModel);
-            var packageWithTotalOrigin = await _repository.GetAllPackageSearch(packages, pageNumber, pageSize, sortField, sortOrder);
+            var packageWithTotalOrigin = await _repository.Search(packages, pageNumber, pageSize, sortField, sortOrder);
 
             if (!packageWithTotalOrigin.Item1.Any())
             {
