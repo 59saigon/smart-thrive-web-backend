@@ -106,6 +106,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
