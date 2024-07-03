@@ -12,6 +12,8 @@ namespace SWD.SmartThrive.Services.Services.Interface
 
         public Task<List<PackageModel>?> GetAllPagination(int pageNumber, int pageSize, string orderBy);
 
+        public Task<List<PackageModel>> GetAllPackageByStudentId( Guid idStudent);
+
         public Task<(List<PackageModel>?, long)> GetAllPackageSearch(PackageModel packageModel, int pageNumber, int pageSize, string orderBy);
 
         public Task<long> GetTotalCount();

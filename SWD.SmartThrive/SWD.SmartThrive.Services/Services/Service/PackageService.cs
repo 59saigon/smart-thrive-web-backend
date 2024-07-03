@@ -102,6 +102,17 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return (courseModels, packageWithTotalOrigin.Item2);
         }
+
+        public async Task<List<PackageModel>> GetAllPackageByStudentId( Guid idStudent)
+        {
+           var pk = await _repository.GetAllPackageByIdStudent(idStudent);
+            if (pk.Any())
+            {
+                var pkmapper = _mapper.Map<List<PackageModel>>(pk);
+                return pkmapper;
+            }
+            return null;
         
+        }
     }
 }

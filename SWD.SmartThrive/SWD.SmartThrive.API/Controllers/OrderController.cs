@@ -159,12 +159,12 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var packages = await _service.GetAllPagination(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.OrderBy);
+                var ORDERS = await _service.GetAllPagination(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.OrderBy);
                 long totalOrigin = await _service.GetTotalCount();
-                return packages switch
+                return ORDERS switch
                 {
                     null => Ok(new PaginatedListResponse<OrderModel>(ConstantMessage.NotFound)),
-                    not null => Ok(new PaginatedListResponse<OrderModel>(ConstantMessage.Success, packages, totalOrigin, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.OrderBy))
+                    not null => Ok(new PaginatedListResponse<OrderModel>(ConstantMessage.Success, ORDERS, totalOrigin, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.OrderBy))
                 };
             }
             catch (Exception ex)

@@ -7,5 +7,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
     {
         Task<List<Package>> GetAllPackage(int pageNumber, int pageSize, string orderBy);
         Task<(List<Package>, long)> GetAllPackageSearch(Package Package, int pageNumber, int pageSize, string orderBy);
+
+        Task<List<Package>> GetAllPackageByIdStudent(Guid idstudent);
     }
 }

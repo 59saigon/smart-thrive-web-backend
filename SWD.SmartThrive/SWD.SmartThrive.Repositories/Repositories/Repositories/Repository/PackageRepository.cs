@@ -26,6 +26,23 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return await queryable.ToListAsync();
         }
 
+        public async Task<List<Package>> GetAllPackageByIdStudent(Guid id)
+        {
+            var queryable = await _context.Packages.Where(x => x.StudentId == id).ToListAsync();
+           // var totalOrigin = queryable.Count();
+            //if(queryable.Any())
+            //{
+            //    //// Lọc theo trang
+            //    //queryable = (List<Package>)queryable.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            //    //var pacakges = await queryable.ToListAsync();
+
+            //    return queryable;
+            //}
+            return queryable;
+        
+        }
+
         public async Task<(List<Package>, long)> GetAllPackageSearch(Package Package, int pageNumber, int pageSize, string orderBy)
         {
             var queryable = this.GetQueryablePaginationWithOrderBy(orderBy);
