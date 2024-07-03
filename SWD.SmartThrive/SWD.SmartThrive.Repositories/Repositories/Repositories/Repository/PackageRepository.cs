@@ -32,7 +32,10 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
         public async Task<List<Package>> GetAllPackageByStudentId(Guid id)
         {
-            var queryable = await GetQueryable(x => x.StudentId == id).ToListAsync();
+            var queryable = await GetQueryable(x => x.StudentId == id)
+                .Include(m => m.Student)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Orders).ToListAsync();
             
             return queryable;
         }

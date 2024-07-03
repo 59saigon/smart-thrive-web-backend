@@ -44,16 +44,16 @@ namespace SWD.SmartThrive.API.Controllers
             }
         }
 
-        [HttpGet("get-all-package-by-student-id")]
-        public async Task<IActionResult> GetAllbyStudentId(Guid id)
+        [HttpGet("get-all-package-by-student-id/{studentId}")]
+        public async Task<IActionResult> GetAllbyStudentId(Guid studentId)
         {
             try
             {
-                if (id == Guid.Empty)
+                if (studentId == Guid.Empty)
                 {
                     return Ok("Id is empty");
                 }
-                var packages = await _service.GetAllPackageByStudentId(id);
+                var packages = await _service.GetAllPackageByStudentId(studentId);
 
                 return packages switch
                 {
