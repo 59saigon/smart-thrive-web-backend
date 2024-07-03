@@ -29,12 +29,33 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var sessions = await _service.GetAllSession();
+                var sessions = await _service.GetAll();
 
                 return sessions switch
                 {
                     null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Fail, null)),
                     not null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Success, sessions))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("get-all-pagination")]
+        public async Task<IActionResult> GetAllPagination(PaginatedRequest paginatedRequest)
+        {
+            try
+            {
+                var sessions = await _service.GetAllPagination(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                long totalOrigin = await _service.GetTotalCount();
+
+                return sessions switch
+                {
+                    null => Ok(new PaginatedListResponse<SessionModel>(ConstantMessage.NotFound)),
+                    not null => Ok(new PaginatedListResponse<SessionModel>(ConstantMessage.Success, sessions, totalOrigin,
+                                        paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField))
                 };
             }
             catch (Exception ex)
@@ -52,7 +73,7 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var sessionModel = await _service.GetSession(id);
+                var sessionModel = await _service.GetById(id);
 
                 return sessionModel switch
                 {
@@ -72,7 +93,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var isSession = await _service.AddSession(_mapper.Map<SessionModel>(session));
+                var isSession = await _service.Add(_mapper.Map<SessionModel>(session));
 
                 return isSession switch
                 {
@@ -93,7 +114,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 if (id != Guid.Empty)
                 {
-                    var isSession = await _service.DeleteSession(id);
+                    var isSession = await _service.Delete(id);
 
                     return isSession switch
                     {
@@ -119,7 +140,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 var sessionModel = _mapper.Map<SessionModel>(session);
 
-                var isSession = await _service.UpdateSession(sessionModel);
+                var isSession = await _service.Update(sessionModel);
 
                 return isSession switch
                 {

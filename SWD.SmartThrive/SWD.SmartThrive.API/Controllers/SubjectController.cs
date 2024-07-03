@@ -49,7 +49,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var subjects = await _service.GetAllPaginationWithOrder(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var subjects = await _service.GetAllPagination(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
                 long totalOrigin = await _service.GetTotalCount();
 
                 return subjects switch
@@ -150,16 +150,24 @@ namespace SWD.SmartThrive.API.Controllers
         }
 
         [HttpPut("delete")]
-        public async Task<IActionResult> Delete(SubjectRequest request)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                bool isSuccess = await _service.Delete(_mapper.Map<SubjectModel>(request));
-                return isSuccess switch
+                if (id != Guid.Empty)
                 {
-                    true => Ok(new BaseResponse(isSuccess, ConstantMessage.Success)),
-                    false => Ok(new BaseResponse(isSuccess, ConstantMessage.Fail))
-                };
+                    var isSession = await _service.Delete(id);
+
+                    return isSession switch
+                    {
+                        true => Ok(new BaseResponse(isSession, ConstantMessage.Success)),
+                        _ => Ok(new BaseResponse(isSession, ConstantMessage.Fail))
+                    };
+                }
+                else
+                {
+                    return BadRequest("It's not empty");
+                }
             }
             catch (Exception ex)
             {

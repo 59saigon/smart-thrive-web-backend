@@ -30,7 +30,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var orders = await _service.GetAllOrder();
+                var orders = await _service.GetAll();
 
                 return orders switch
                 {
@@ -53,7 +53,7 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var orderModel = await _service.GetOrder(id);
+                var orderModel = await _service.GetById(id);
 
                 return orderModel switch
                 {
@@ -73,7 +73,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var isOrder = await _service.AddOrder(_mapper.Map<OrderModel>(order));
+                var isOrder = await _service.Add(_mapper.Map<OrderModel>(order));
 
                 return isOrder switch
                 {
@@ -94,7 +94,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 if (id != Guid.Empty)
                 {
-                    var isOrder = await _service.DeleteOrder(id);
+                    var isOrder = await _service.Delete(id);
 
                     return isOrder switch
                     {
@@ -120,7 +120,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 var orderModel = _mapper.Map<OrderModel>(order);
 
-                var isOrder = await _service.UpdateOrder(orderModel);
+                var isOrder = await _service.Update(orderModel);
 
                 return isOrder switch
                 {
@@ -139,7 +139,7 @@ namespace SWD.SmartThrive.API.Controllers
             try
             {
                 var order = _mapper.Map<OrderModel>(paginatedRequest.Result);
-                var orders = await _service.GetAllOrderSearch(order, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var orders = await _service.Search(order, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
 
                 return orders.Item1 switch
                 {

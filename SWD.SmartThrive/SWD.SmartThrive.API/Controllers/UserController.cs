@@ -56,7 +56,7 @@ namespace SWD.SmartThrive.API.Controllers
             try
             {
                 var user = _mapper.Map<UserModel>(paginatedRequest.Result);
-                var users = await _service.GetAllUserSearch(user, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var users = await _service.Search(user, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
 
                 return users.Item1 switch
                 {
@@ -100,7 +100,7 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var userModel = await _service.GetUser(id);
+                var userModel = await _service.GetById(id);
 
                 return userModel switch
                 {
@@ -120,7 +120,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var isUser = await _service.AddUser(_mapper.Map<UserModel>(user));
+                var isUser = await _service.Add(_mapper.Map<UserModel>(user));
 
                 return isUser switch
                 {
@@ -141,7 +141,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 if (id != Guid.Empty)
                 {
-                    var isUser = await _service.DeleteUser(id);
+                    var isUser = await _service.Delete(id);
 
                     return isUser switch
                     {
@@ -167,7 +167,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 var userModel = _mapper.Map<UserModel>(user);
 
-                var isUser = await _service.UpdateUser(userModel);
+                var isUser = await _service.Update(userModel);
 
                 return isUser switch
                 {

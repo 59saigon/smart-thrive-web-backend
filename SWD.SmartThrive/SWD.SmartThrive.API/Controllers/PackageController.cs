@@ -30,7 +30,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var packages = await _service.GetAllPackage();
+                var packages = await _service.GetAll();
 
                 return packages switch
                 {
@@ -53,7 +53,7 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var packageModel = await _service.GetPackage(id);
+                var packageModel = await _service.GetById(id);
 
                 return packageModel switch
                 {
@@ -73,7 +73,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var isPackage = await _service.AddPackage(_mapper.Map<PackageModel>(package));
+                var isPackage = await _service.Add(_mapper.Map<PackageModel>(package));
 
                 return isPackage switch
                 {
@@ -94,7 +94,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 if (id != Guid.Empty)
                 {
-                    var isPackage = await _service.DeletePackage(id);
+                    var isPackage = await _service.Delete(id);
 
                     return isPackage switch
                     {
@@ -120,7 +120,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 var packageModel = _mapper.Map<PackageModel>(package);
 
-                var isPackage = await _service.UpdatePackage(packageModel);
+                var isPackage = await _service.Update(packageModel);
 
                 return isPackage switch
                 {
@@ -134,38 +134,13 @@ namespace SWD.SmartThrive.API.Controllers
             }
         }
 
-        //[HttpGet("get-all-package-by-student")]
-        //public async Task<IActionResult> GetAllPackageByStudent(Guid studentid)
-        //{
-        //    try
-        //    {
-        //        if (studentid == Guid.Empty)
-        //        {
-        //            return BadRequest("StudentId is empty");
-        //        }
-
-        //        var packageModels = await _service.GetAllPackageByStudent(studentid);
-
-        //        return packageModels switch
-        //        {
-        //            not null => Ok(new BaseReponseList<PackageModel>(packageModels, ConstantMessage.Success)),
-        //            null => Ok(new BaseReponseList<PackageModel>(null, ConstantMessage.NotFound, ConstantHttpStatus.NOT_FOUND))
-        //        };
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
         [HttpPost("search")]
         public async Task<IActionResult> GetAllPackageSearch(PaginatedRequest<PackageSearchRequest> paginatedRequest)
         {
             try
             {
                 var package = _mapper.Map<PackageModel>(paginatedRequest.Result);
-                var packages = await _service.GetAllPackageSearch(package, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var packages = await _service.Search(package, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
 
                 return packages.Item1 switch
                 {

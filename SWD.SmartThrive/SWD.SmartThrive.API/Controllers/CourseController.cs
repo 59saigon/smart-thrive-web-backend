@@ -30,7 +30,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var courses = await _service.GetAllCourse();
+                var courses = await _service.GetAll();
 
                 return courses switch
                 {
@@ -53,7 +53,7 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var courseModel = await _service.GetCourse(id);
+                var courseModel = await _service.GetById(id);
 
                 return courseModel switch
                 {
@@ -73,7 +73,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var isCourse = await _service.AddCourse(_mapper.Map<CourseModel>(course));
+                var isCourse = await _service.Add(_mapper.Map<CourseModel>(course));
 
                 return isCourse switch
                 {
@@ -94,7 +94,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 if (id != Guid.Empty)
                 {
-                    var isCourse = await _service.DeleteCourse(id);
+                    var isCourse = await _service.Delete(id);
 
                     return isCourse switch
                     {
@@ -120,7 +120,7 @@ namespace SWD.SmartThrive.API.Controllers
             {
                 var courseModel = _mapper.Map<CourseModel>(course);
 
-                var isCourse = await _service.UpdateCourse(courseModel);
+                var isCourse = await _service.Update(courseModel);
 
                 return isCourse switch
                 {
@@ -140,7 +140,7 @@ namespace SWD.SmartThrive.API.Controllers
             try
             {
                 var course = _mapper.Map<CourseModel>(paginatedRequest.Result);
-                var courses = await _service.GetAllCourseSearch(course, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var courses = await _service.Search(course, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
 
                 return courses.Item1 switch
                 {

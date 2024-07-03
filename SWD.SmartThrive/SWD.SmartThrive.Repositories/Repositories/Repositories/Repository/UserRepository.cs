@@ -46,7 +46,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return result;
         }
 
-        public async Task<List<User>> GetAllUser(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<User>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -59,7 +59,15 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 .Include(m => m.Students).ToListAsync();
         }
 
-        public async Task<(List<User>, long)> GetAllUserSearch(User user, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<User> GetById(Guid id)
+        {
+            var query = GetQueryable(m => m.Id == id);
+            var user = await query.Include(m => m.Students).SingleOrDefaultAsync();
+
+            return user;
+        }
+
+        public async Task<(List<User>, long)> Search(User user, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable =  base.ApplySort(sortField, sortOrder);
 

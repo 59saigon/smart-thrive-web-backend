@@ -38,46 +38,53 @@ namespace SWD.SmartThrive.Services.Services.Service
             }
         }
 
-        public async Task<bool> Delete(StudentModel model)
+        public async Task<bool> Delete(Guid id)
         {
-            try
+            var entity = await _studentRepository.GetById(id);
+
+            if (entity == null)
             {
-                return await _studentRepository.Delete(_mapper.Map<Student>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            var student = _mapper.Map<Student>(entity);
+            return await _studentRepository.Delete(student);
         }
 
-        public async Task<List<StudentModel>> GetAll()
+        public async Task<List<StudentModel>?> GetAll()
         {
-            return _mapper.Map<List<StudentModel>>(await _studentRepository.GetAll());
+            var students = await _studentRepository.GetAll();
+
+            if (!students.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<StudentModel>>(students);
         }
 
-        public async Task<List<StudentModel>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<StudentModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            try
+            var students = await _studentRepository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
+
+            if (!students.Any())
             {
-                return _mapper.Map<List<StudentModel>>(await _studentRepository.GetAllPaginationWithOrder(pageNumber, pageSize, sortField, sortOrder));
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<List<StudentModel>>(students);
         }
 
-        public async Task<StudentModel> GetById(Guid id)
+        public async Task<StudentModel?> GetById(Guid id)
         {
-            try
+            var students = await _studentRepository.GetById(id);
+
+            if (students == null)
             {
-                var student = await _studentRepository.GetById(id);
-                return _mapper.Map<StudentModel>(student);
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return _mapper.Map<StudentModel>(students);
         }
 
         public async Task<List<StudentModel>> GetStudentsByUserId(Guid id)
@@ -108,14 +115,16 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Update(StudentModel model)
         {
-            try
+            var entity = await _studentRepository.GetById(model.Id);
+
+            if (entity == null)
             {
-                return await _studentRepository.Update(_mapper.Map<Student>(model));
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            _mapper.Map(model, entity);
+            entity = await SetBaseEntityToUpdateFunc(entity);
+
+            return await _studentRepository.Update(entity);
         }
     }
 }

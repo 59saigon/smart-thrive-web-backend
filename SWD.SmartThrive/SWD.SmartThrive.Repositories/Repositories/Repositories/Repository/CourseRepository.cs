@@ -4,6 +4,7 @@ using SWD.SmartThrive.Repositories.Data;
 using SWD.SmartThrive.Repositories.Data.Entities;
 using SWD.SmartThrive.Repositories.Repositories.Base;
 using SWD.SmartThrive.Repositories.Repositories.Repositories.Interface;
+using System.Linq;
 
 namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 {
@@ -16,7 +17,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             _context = context;
         }
 
-        public async Task<List<Course>> GetAllCourse(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<Course>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -30,7 +31,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 .ToListAsync();
         }
 
-        public async Task<(List<Course>, long)> GetAllCourseSearch(Course Course, int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<(List<Course>, long)> Search(Course Course, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 
@@ -119,6 +120,16 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return null; 
         }
 
+        public async new Task<Course> GetById(Guid id)
+        {
+            var query = GetQueryable(m => m.Id == id);
+            var user = await query.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .SingleOrDefaultAsync();
 
+            return user;
+        }
     }
 }

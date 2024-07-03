@@ -178,7 +178,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Base
         public virtual async Task<TEntity> GetById(Guid id)
         {
             var queryable = GetQueryable(x => x.Id == id);
-            var entity = await queryable.FirstOrDefaultAsync();
+            var entity = await queryable.SingleOrDefaultAsync();
 
             return entity;
         }

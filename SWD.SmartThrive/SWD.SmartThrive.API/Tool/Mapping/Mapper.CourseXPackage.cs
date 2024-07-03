@@ -8,11 +8,9 @@ namespace SWD.SmartThrive.API.Tool.Mapping
 {
     public partial class Mapper : Profile
     {
-        public void SubjectMapping()
+        public void CourseXPackageMapping()
         {
-            CreateMap<Subject, SubjectModel>().ReverseMap();
-            CreateMap<SubjectModel, SubjectRequest>().ReverseMap();
-            CreateMap<SubjectSearchRequest, SubjectModel>().ReverseMap();
+            CreateMap<CourseXPackage, CourseXPackageModel>().ReverseMap();
         }
     }
 }

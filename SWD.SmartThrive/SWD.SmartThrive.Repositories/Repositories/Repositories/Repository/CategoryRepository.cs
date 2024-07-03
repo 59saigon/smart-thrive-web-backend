@@ -13,7 +13,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
         {
         }
 
-        public async Task<List<Category>> GetAllPaginationWithOrder(int pageNumber, int pageSize, string sortField, int sortOrder)
+        public async Task<List<Category>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
 

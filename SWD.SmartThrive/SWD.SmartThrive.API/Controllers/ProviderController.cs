@@ -56,7 +56,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var providers = await _providerService.GetAllPaginationWithOrder(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+                var providers = await _providerService.GetAllPagination(paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
                 long totalOrigin = await _providerService.GetTotalCount();
 
                 return providers switch

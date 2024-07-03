@@ -17,6 +17,9 @@ namespace SWD.SmartThrive.API.Tool.Mapping
             SessionMapping();
             StudentMapping();
             UserMapping();
+            LocationMapping();
+            CourseXPackageMapping();
+            SubjectMapping();
         }
     }
 }
