@@ -56,7 +56,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             var queryable = base.GetQueryable(m => m.CategoryId == id);
 
             return await queryable.Include(m => m.Category).Include(m => m.Courses)
-                .ToListAsync(); ;
+                .ToListAsync();
         }
 
         public async Task<Subject> GetById(Guid id)

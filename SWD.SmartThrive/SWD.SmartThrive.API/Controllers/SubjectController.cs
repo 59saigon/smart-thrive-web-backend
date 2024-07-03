@@ -88,7 +88,7 @@ namespace SWD.SmartThrive.API.Controllers
             };
         }
 
-        [HttpGet("get-by-categoryId/{categoryId}")]
+        [HttpGet("get-all-subject-by-categoryId/{categoryId}")]
         public async Task<IActionResult> GetByCategoryId(Guid categoryId)
         {
             try
