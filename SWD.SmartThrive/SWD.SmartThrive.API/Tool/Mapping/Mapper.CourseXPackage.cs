@@ -11,6 +11,7 @@ namespace SWD.SmartThrive.API.Tool.Mapping
         public void CourseXPackageMapping()
         {
             CreateMap<CourseXPackage, CourseXPackageModel>().ReverseMap();
+            CreateMap<PackageXCourseRequest, CourseXPackageModel>().ReverseMap();
         }
     }
 }

@@ -65,6 +65,26 @@ namespace SWD.SmartThrive.Services.Base
 
             return entity;
         }
+        public async Task<TEntity> SetBaseEntityToCreateFuncMany(TEntity entity)
+        {
+
+            var user = await GetUserInfo();
+            if (user != null)
+            {
+                entity.CreatedBy = user.Email;
+                entity.CreatedDate = DateTime.UtcNow;
+                entity.LastUpdatedBy = user.Email;
+                entity.LastUpdatedDate = entity.CreatedDate;
+                entity.IsDeleted = false;
+            }
+            else
+            {
+                entity.CreatedDate = DateTime.UtcNow;
+                entity.IsDeleted = false;
+            }
+
+            return entity;
+        }
 
         public async Task<TEntity> SetBaseEntityToUpdateFunc(TEntity entity)
         {
