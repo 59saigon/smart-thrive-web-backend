@@ -102,11 +102,17 @@ namespace SWD.SmartThrive.Services.Services.Service
             return _mapper.Map<SubjectModel>(subjects);
         }
 
-        public async Task<List<SubjectModel>> GetByCategoryId(Guid id)
+        public async Task<List<SubjectModel>?> GetSubjectsByCategoryId(Guid categoryId)
         {
             try
             {
-                var subjects = await _subjectRepository.GetByCategoryId(id);
+                var subjects = await _subjectRepository.GetSubjectsByCategoryId(categoryId);
+
+                if (!subjects.Any())
+                {
+                    return null;
+                }
+
                 return _mapper.Map<List<SubjectModel>>(subjects);
             }
             catch (Exception ex)

@@ -88,7 +88,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return (sessions, totalOrigin);
         }
 
-        public async Task<Session> GetById(Guid id)
+        public async Task<Session?> GetById(Guid id)
         {
             var query = GetQueryable(m => m.Id == id);
             var session = await query.Include(m => m.Course).SingleOrDefaultAsync();
@@ -96,9 +96,9 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return session;
         }
 
-        public async Task<List<Session>> GetAllByIdCourse(Guid id)
+        public async Task<List<Session>> GetAllByCourseId(Guid courseId)
         {
-           var sessions = await GetQueryable(m => m.CourseId == id).ToListAsync();
+           var sessions = await GetQueryable(m => m.CourseId == courseId).Include(m => m.Course).ToListAsync();
             return sessions;
         }
     }
