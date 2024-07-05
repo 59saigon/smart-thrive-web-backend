@@ -15,26 +15,26 @@ using System.Threading.Tasks;
 
 namespace SWD.SmartThrive.Services.Services.Service
 {
-    public class PackageXCouseService : BaseService<CourseXPackage>, IPackageXCourseService
+    public class CouseXPackageService : BaseService<CourseXPackage>, ICourseXPackageService
     {
         private readonly ICourseXPackageRepository _repository;
 
-        public PackageXCouseService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(mapper, unitOfWork, httpContextAccessor)
+        public CouseXPackageService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(mapper, unitOfWork, httpContextAccessor)
         {
             _repository = unitOfWork.CourseXPackageRepository;
         }
         public async Task<bool> Add(CourseXPackageModel PackageModel)
         {
-            var entity = await _repository.GetByTwoId(PackageModel.CourseId, PackageModel.PackageId);
-            if(entity != null) { return false; }
+            var entity = await _repository.GetByCourseIdAndPackageId(PackageModel.CourseId, PackageModel.PackageId);
+            if (entity != null) { return false; }
             var Cr = _mapper.Map<CourseXPackage>(PackageModel);
             var cr = await SetBaseEntityToCreateFuncMany(Cr);
             return await _repository.Add(cr);
         }
 
-        public async Task<bool> Delete(Guid idCourse, Guid idPackage)
+        public async Task<bool> Delete(Guid courseId, Guid packageId)
         {
-            var entity = await _repository.GetByTwoId(idCourse,idPackage);
+            var entity = await _repository.GetByCourseIdAndPackageId(courseId, packageId);
             if (entity == null)
             {
                 return false;
@@ -44,18 +44,16 @@ namespace SWD.SmartThrive.Services.Services.Service
             return await _repository.Delete(Course);
         }
 
-        public async Task<List<CourseXPackageModel>> GetAllByIdPackage(Guid id)
+        public async Task<List<CourseXPackageModel>?> GetAllByPackageId(Guid packageId)
         {
-            var cr = await _repository.GetAllByIdPackage(id);
-            if(cr.Any())
+            var courseXPackages = await _repository.GetAllByPackageId(packageId);
+            if (!courseXPackages.Any())
             {
-                List<CourseXPackageModel> s =  _mapper.Map<List<CourseXPackageModel>>(cr);
-                return s;
-
+                return null;
             }
-            return null;
-         }
+            return _mapper.Map<List<CourseXPackageModel>>(courseXPackages);
+        }
 
-      
+
     }
 }

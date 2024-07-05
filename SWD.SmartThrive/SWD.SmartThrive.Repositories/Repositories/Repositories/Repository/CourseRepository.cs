@@ -120,7 +120,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             return null; 
         }
 
-        public async new Task<Course> GetById(Guid id)
+        public async new Task<Course?> GetById(Guid id)
         {
             var query = GetQueryable(m => m.Id == id);
             var user = await query.Include(m => m.Sessions)
