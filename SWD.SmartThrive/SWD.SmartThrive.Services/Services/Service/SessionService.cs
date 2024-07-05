@@ -106,7 +106,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             return _mapper.Map<SessionModel>(session);
         }
 
-        public async Task<List<SessionModel>?> GetAllByIdCourse(Guid id)
+        public async Task<List<SessionModel>?> GetAllByCourseId(Guid id)
         {
 
             var sessions = await _sessionRepository.GetAllByIdCourse(id);

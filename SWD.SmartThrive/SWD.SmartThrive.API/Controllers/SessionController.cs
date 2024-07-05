@@ -43,7 +43,7 @@ namespace SWD.SmartThrive.API.Controllers
             }
         }
         [HttpGet("get-all-by-id-course")]
-        public async Task<IActionResult> GetAllByIdCourse(Guid id)
+        public async Task<IActionResult> GetAllByCourseId(Guid id)
         {
             try
             {

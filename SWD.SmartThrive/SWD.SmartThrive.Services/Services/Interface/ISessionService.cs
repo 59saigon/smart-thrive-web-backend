@@ -9,7 +9,7 @@ namespace SWD.SmartThrive.Services.Services.Interface
         Task<bool> Delete(Guid id);
         Task<List<SessionModel>?> GetAll();
 
-        Task<List<SessionModel>?> GetAllByIdCourse(Guid id);
+        Task<List<SessionModel>?> GetAllByCourseId(Guid id);
         Task<List<SessionModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<SessionModel?> GetById(Guid id);
         Task<(List<SessionModel>?, long)> Search(SessionModel model, int pageNumber, int pageSize, string sortField, int sortOrder);
