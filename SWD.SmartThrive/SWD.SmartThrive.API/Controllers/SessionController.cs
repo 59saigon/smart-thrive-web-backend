@@ -47,7 +47,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var sessions = await _service.GetAllByIdCourse(id);
+                var sessions = await _service.GetAllByCourseId(id);
 
                 return sessions switch
                 {
