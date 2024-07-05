@@ -95,5 +95,11 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             return session;
         }
+
+        public async Task<List<Session>> GetAllByIdCourse(Guid id)
+        {
+           var sessions = await GetQueryable(m => m.CourseId == id).ToListAsync();
+            return sessions;
+        }
     }
 }

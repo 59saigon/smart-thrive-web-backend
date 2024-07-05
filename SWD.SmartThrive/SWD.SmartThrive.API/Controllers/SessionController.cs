@@ -42,6 +42,24 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("get-all-by-id-course")]
+        public async Task<IActionResult> GetAllByIdCourse(Guid id)
+        {
+            try
+            {
+                var sessions = await _service.GetAllByIdCourse(id);
+
+                return sessions switch
+                {
+                    null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Fail, null)),
+                    not null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Success, sessions))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost("get-all-pagination")]
         public async Task<IActionResult> GetAllPagination(PaginatedRequest paginatedRequest)
