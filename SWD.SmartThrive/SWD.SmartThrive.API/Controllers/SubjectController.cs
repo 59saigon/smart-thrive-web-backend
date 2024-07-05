@@ -88,8 +88,8 @@ namespace SWD.SmartThrive.API.Controllers
             };
         }
 
-        [HttpGet("get-all-subject-by-categoryId/{categoryId}")]
-        public async Task<IActionResult> GetByCategoryId(Guid categoryId)
+        [HttpGet("get-all-by-categoryId/{categoryId}")]
+        public async Task<IActionResult> GetSubjectsByCategoryId(Guid categoryId)
         {
             try
             {
@@ -97,12 +97,12 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var subject = await _service.GetByCategoryId(categoryId);
+                var subjects = await _service.GetSubjectsByCategoryId(categoryId);
 
-                return subject switch
+                return subjects switch
                 {
                     null => Ok(new ItemListResponse<SubjectModel>(ConstantMessage.Fail, null)),
-                    not null => Ok(new ItemListResponse<SubjectModel>(ConstantMessage.Success, subject))
+                    not null => Ok(new ItemListResponse<SubjectModel>(ConstantMessage.Success, subjects))
                 };
             }
             catch (Exception ex)

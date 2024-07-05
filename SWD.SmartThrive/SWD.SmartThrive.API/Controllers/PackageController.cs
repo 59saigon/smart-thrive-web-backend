@@ -44,7 +44,7 @@ namespace SWD.SmartThrive.API.Controllers
             }
         }
 
-        [HttpGet("get-all-package-by-student-id/{studentId}")]
+        [HttpGet("get-all-by-student-id/{studentId}")]
         public async Task<IActionResult> GetAllbyStudentId(Guid studentId)
         {
             try

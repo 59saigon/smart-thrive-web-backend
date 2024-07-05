@@ -7,7 +7,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
     {
         Task<List<Subject>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<(List<Subject>, long)> Search(Subject subject, int pageNumber, int pageSize, string sortField, int sortOrder);
-        Task<List<Subject>> GetByCategoryId(Guid id);
+        Task<List<Subject>> GetSubjectsByCategoryId(Guid categoryId);
         Task<Subject> GetById(Guid id);
 
     }

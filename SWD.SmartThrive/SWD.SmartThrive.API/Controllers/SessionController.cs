@@ -42,12 +42,12 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("get-all-by-id-course")]
-        public async Task<IActionResult> GetAllByCourseId(Guid id)
+        [HttpGet("get-all-by-course-id/{courseId}")]
+        public async Task<IActionResult> GetAllByCourseId(Guid courseId)
         {
             try
             {
-                var sessions = await _service.GetAllByCourseId(id);
+                var sessions = await _service.GetAllByCourseId(courseId);
 
                 return sessions switch
                 {

@@ -100,12 +100,12 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     return BadRequest("Id is empty");
                 }
-                var StudentModel = await _studentService.GetStudentsByUserId(userId);
+                var studentModel = await _studentService.GetStudentsByUserId(userId);
 
-                return StudentModel switch
+                return studentModel switch
                 {
-                    null => Ok("No student with given userId"),
-                    not null => Ok(StudentModel)
+                    null => Ok(new ItemListResponse<StudentModel>(ConstantMessage.NotFound)),
+                    not null => Ok(new ItemListResponse<StudentModel>(ConstantMessage.Success, studentModel))
                 };
             }
             catch (Exception ex)
