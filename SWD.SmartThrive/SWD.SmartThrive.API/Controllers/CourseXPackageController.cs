@@ -14,30 +14,31 @@ namespace SWD.SmartThrive.API.Controllers
     [Route("api/coursexpackage")]
     [ApiController]
     [Authorize]
-    public class PackageXCourseController : Controller
+    public class CourseXPackageController : Controller
     {
-        private readonly IPackageXCourseService _service;
+        private readonly ICourseXPackageService _service;
         private readonly IMapper _mapper;
 
-        public PackageXCourseController(IPackageXCourseService service, IMapper mapper) {
+        public CourseXPackageController(ICourseXPackageService service, IMapper mapper)
+        {
             _service = service;
             _mapper = mapper;
         }
 
-        [HttpGet("get-all-by-id-package/{id}")]
-        public async Task<IActionResult> GetAllById(Guid id)
+        [HttpGet("get-all-by-package-id/{packageId}")]
+        public async Task<IActionResult> GetAllById(Guid packageId)
         {
             try
             {
-                if(id == Guid.Empty)
+                if (packageId == Guid.Empty)
                 {
-                    return Ok("Must be input id package");
+                    return Ok("Must be input package id");
                 }
-                List<CourseXPackageModel> x = await _service.GetAllByIdPackage(id);
-                return x switch
+                List<CourseXPackageModel> courseXPackages = await _service.GetAllByPackageId(packageId);
+                return courseXPackages switch
                 {
-                    null => Ok(new ItemListResponse<CourseXPackageModel>(ConstantMessage.Fail, null)),
-                    not null => Ok(new ItemListResponse<CourseXPackageModel>(ConstantMessage.Success, x))
+                    null => Ok(new ItemListResponse<CourseXPackageModel>(ConstantMessage.Fail)),
+                    not null => Ok(new ItemListResponse<CourseXPackageModel>(ConstantMessage.Success, courseXPackages))
                 };
 
             }
@@ -68,7 +69,7 @@ namespace SWD.SmartThrive.API.Controllers
         }
 
         [HttpPut("delete")]
-        public async Task<IActionResult> Delete(Guid idcourse , Guid idpackage)
+        public async Task<IActionResult> Delete(Guid idcourse, Guid idpackage)
         {
             try
             {

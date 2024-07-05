@@ -15,24 +15,22 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             context = _context;
         }
 
-        //public async Task<bool> DeleteCourseXPackage(Guid idcourse, Guid idpackage)
-        //{
-        //    var s = await GetByTwoId(idcourse,idpackage);
-        //    s.IsDeleted = true;
-        //    await Update(s);
-        //    return true;
-        //}
-
-        public async Task<List<CourseXPackage>> GetAllByIdPackage(Guid id)
+        public async Task<List<CourseXPackage>> GetAllByPackageId(Guid id)
         {
-            var queryable = await GetQueryable(x => x.PackageId == id).ToListAsync();
-            return queryable;
+            var queryable = GetQueryable(x => x.PackageId == id);
+            
+            if (queryable.Any())
+            {
+                queryable = queryable.Include(m => m.Course).Include(m => m.Package);
+            }
+
+            return await queryable.ToListAsync();
         }
 
-        public async Task<CourseXPackage> GetByTwoId(Guid idcourse, Guid idpackage)
+        public async Task<CourseXPackage?> GetByCourseIdAndPackageId(Guid courseId, Guid packageId)
         {
-            CourseXPackage s = await context.CourseXPackages.Where(x => x.PackageId == idpackage && x.CourseId == idcourse).SingleOrDefaultAsync();
-            return s;
+            CourseXPackage courseXPackage = await context.CourseXPackages.Where(x => x.PackageId == packageId && x.CourseId == courseId).Include(m => m.Course).Include(m => m.Package).SingleOrDefaultAsync();
+            return courseXPackage;
         }
     }
 }

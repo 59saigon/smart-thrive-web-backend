@@ -5,9 +5,9 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
 {
     public interface ICourseXPackageRepository : IBaseRepository<CourseXPackage>
     {
-        Task<List<CourseXPackage>> GetAllByIdPackage(Guid id);
+        Task<List<CourseXPackage>> GetAllByPackageId(Guid id);
 
-        Task<CourseXPackage> GetByTwoId(Guid idcourse, Guid idpackage);
+        Task<CourseXPackage> GetByCourseIdAndPackageId(Guid courseId, Guid packageId);
      //   Task<bool> DeleteCourseXPackage(Guid idcourse,Guid idpackage);
     }
 }

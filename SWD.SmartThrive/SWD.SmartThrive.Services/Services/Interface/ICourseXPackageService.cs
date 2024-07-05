@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SWD.SmartThrive.Services.Services.Interface
 {
-    public interface IPackageXCourseService
+    public interface ICourseXPackageService
     {
         Task<bool> Add(CourseXPackageModel PackageModel);
         Task<bool> Delete(Guid idCourse,Guid idPackage);
-        Task<List<CourseXPackageModel>> GetAllByIdPackage(Guid id);
+        Task<List<CourseXPackageModel>?> GetAllByPackageId(Guid packageId);
     }
 }

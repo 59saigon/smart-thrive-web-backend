@@ -108,7 +108,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IPackageXCourseService, PackageXCouseService>();
+builder.Services.AddScoped<ICourseXPackageService, CouseXPackageService>();
 
 builder.Services.AddHttpContextAccessor();
 #endregion

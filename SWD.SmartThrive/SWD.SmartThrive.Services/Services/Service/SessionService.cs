@@ -109,7 +109,7 @@ namespace SWD.SmartThrive.Services.Services.Service
         public async Task<List<SessionModel>?> GetAllByCourseId(Guid id)
         {
 
-            var sessions = await _sessionRepository.GetAllByIdCourse(id);
+            var sessions = await _sessionRepository.GetAllBycourseId(id);
 
             if (!sessions.Any())
             {
