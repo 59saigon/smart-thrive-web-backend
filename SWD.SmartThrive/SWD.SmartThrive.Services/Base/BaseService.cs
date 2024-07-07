@@ -53,13 +53,13 @@ namespace SWD.SmartThrive.Services.Base
             {
                 entity.Id = Guid.NewGuid();
                 entity.CreatedBy = user.Email;
-                entity.CreatedDate = DateTime.UtcNow;
+                entity.CreatedDate = DateTime.Now;
                 entity.LastUpdatedBy = user.Email;
                 entity.LastUpdatedDate = entity.CreatedDate;
                 entity.IsDeleted = false;
             } else
             {
-                entity.CreatedDate = DateTime.UtcNow;
+                entity.CreatedDate = DateTime.Now;
                 entity.IsDeleted = false;
             }
 
@@ -72,14 +72,14 @@ namespace SWD.SmartThrive.Services.Base
             if (user != null)
             {
                 entity.CreatedBy = user.Email;
-                entity.CreatedDate = DateTime.UtcNow;
+                entity.CreatedDate = DateTime.Now;
                 entity.LastUpdatedBy = user.Email;
                 entity.LastUpdatedDate = entity.CreatedDate;
                 entity.IsDeleted = false;
             }
             else
             {
-                entity.CreatedDate = DateTime.UtcNow;
+                entity.CreatedDate = DateTime.Now;
                 entity.IsDeleted = false;
             }
 
@@ -93,7 +93,7 @@ namespace SWD.SmartThrive.Services.Base
             if (user != null)
             {
                 entity.LastUpdatedBy = user.Email;
-                entity.LastUpdatedDate = DateTime.UtcNow;
+                entity.LastUpdatedDate = DateTime.Now;
             }
 
             return entity;

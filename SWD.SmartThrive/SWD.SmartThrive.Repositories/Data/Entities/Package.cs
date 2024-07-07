@@ -12,7 +12,6 @@ namespace SWD.SmartThrive.Repositories.Data.Entities
 
         public DateTime? StartDate { get; set; }
 
-        [Required]
         public DateTime? EndDate { get; set; }
 
         public int? QuantityCourse { get; set; }
