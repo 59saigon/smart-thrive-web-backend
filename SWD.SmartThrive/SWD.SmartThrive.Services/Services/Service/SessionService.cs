@@ -22,6 +22,8 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Add(SessionModel sessionModel)
         {
+            sessionModel.LearnDate = sessionModel.LearnDate.Value.ToLocalTime();
+
             var session = _mapper.Map<Session>(sessionModel);
             var setSession = await SetBaseEntityToCreateFunc(session);
 
@@ -36,6 +38,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             {
                 return false;
             }
+            sessionModel.LearnDate = sessionModel.LearnDate.Value.ToLocalTime();
             _mapper.Map(sessionModel, entity);
             entity = await SetBaseEntityToUpdateFunc(entity);
 

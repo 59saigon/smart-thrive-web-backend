@@ -38,6 +38,7 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Add(UserModel userModel)
         {
+            userModel.DOB = userModel.DOB.Value.ToLocalTime();
             var user = _mapper.Map<User>(userModel);
             var setUser = await SetBaseEntityToCreateFunc(user);
             
@@ -52,6 +53,8 @@ namespace SWD.SmartThrive.Services.Services.Service
             {
                 return false;
             }
+
+            userModel.DOB = userModel.DOB.Value.ToLocalTime();
             _mapper.Map(userModel, entity);
             entity = await SetBaseEntityToUpdateFunc(entity);
 

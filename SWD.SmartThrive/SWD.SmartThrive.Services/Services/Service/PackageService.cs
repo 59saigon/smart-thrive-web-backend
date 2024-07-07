@@ -18,9 +18,12 @@ namespace SWD.SmartThrive.Services.Services.Service
             _repository = unitOfWork.PackageRepository;
         }
 
-        public async Task<bool> Add(PackageModel PackageModel)
+        public async Task<bool> Add(PackageModel packageModel)
         {
-            var Package = _mapper.Map<Package>(PackageModel);
+            packageModel.StartDate = packageModel.StartDate.Value.ToLocalTime();
+            packageModel.EndDate = packageModel.EndDate.Value.ToLocalTime();
+
+            var Package = _mapper.Map<Package>(packageModel);
             var package = await SetBaseEntityToCreateFunc(Package);
             return await _repository.Add(package);
         }
@@ -33,6 +36,9 @@ namespace SWD.SmartThrive.Services.Services.Service
             {
                 return false;
             }
+
+            packageModel.StartDate = packageModel.StartDate.Value.ToLocalTime();
+            packageModel.EndDate = packageModel.EndDate.Value.ToLocalTime();
             _mapper.Map(packageModel, entity);
             entity = await SetBaseEntityToUpdateFunc(entity);
 
