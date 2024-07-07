@@ -224,6 +224,7 @@ namespace SWD.SmartThrive.API.Controllers
                 UserModel userModelMapping = _mapper.Map<UserModel>(userRequest);
 
                 userModelMapping.RoleId = roleModel.Id;
+                userModelMapping.Password = userRequest.Password;
 
                 UserModel userModel = await _service.Register(userModelMapping);
 
