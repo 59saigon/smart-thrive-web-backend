@@ -40,6 +40,7 @@ namespace SWD.SmartThrive.Services.Services.Service
         {
             userModel.DOB = userModel.DOB.Value.ToLocalTime();
             var user = _mapper.Map<User>(userModel);
+            user.Password = userModel.Password;
             var setUser = await SetBaseEntityToCreateFunc(user);
             
             return await _repository.Add(setUser);
