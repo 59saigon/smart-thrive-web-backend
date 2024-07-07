@@ -18,7 +18,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);    
             
-            return await queryable.Include(m => m.User).Include(m => m.Courses).ToListAsync();
+            return await queryable.ToListAsync();
         }
 
         public async Task<(List<Provider>, long)> Search(Provider provider, int pageNumber, int pageSize, string sortField, int sortOrder)
