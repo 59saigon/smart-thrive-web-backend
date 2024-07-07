@@ -28,6 +28,8 @@ namespace SWD.SmartThrive.Services.Services.Service
         {
             try
             {
+                model.DOB = model.DOB.Value.ToLocalTime();
+
                 var student = _mapper.Map<Student>(model);
                 var setStudent = await SetBaseEntityToCreateFunc(student);
                 return await _studentRepository.Add(setStudent);
@@ -121,6 +123,8 @@ namespace SWD.SmartThrive.Services.Services.Service
             {
                 return false;
             }
+
+            model.DOB = model.DOB.Value.ToLocalTime();
             _mapper.Map(model, entity);
             entity = await SetBaseEntityToUpdateFunc(entity);
 
