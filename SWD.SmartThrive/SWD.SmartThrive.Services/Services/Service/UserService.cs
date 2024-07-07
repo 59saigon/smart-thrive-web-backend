@@ -27,7 +27,7 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         private readonly IConfiguration _configuration;
 
-        private DateTime countDown = DateTime.Now.AddMinutes(30);
+        private DateTime countDown = DateTime.Now.AddDays(0.5);
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IHttpContextAccessor _httpContextAccessor) : base(mapper, unitOfWork, _httpContextAccessor)
         {
