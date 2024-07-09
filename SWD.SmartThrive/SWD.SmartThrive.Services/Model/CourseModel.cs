@@ -19,11 +19,11 @@ namespace SWD.SmartThrive.Services.Model
 
         public decimal? Price { get; set; }
 
-        public int? Quantity { get; set; }
+        public int? SoldCourses { get; set; }
 
-        public int? Sold_product { get; set; }
+        public int? TotalSlots { get; set; }
 
-        public int? TotalSlot { get; set; }
+        public int? TotalSessions { get; set; }
 
         public bool? IsApproved { get; set; }
 

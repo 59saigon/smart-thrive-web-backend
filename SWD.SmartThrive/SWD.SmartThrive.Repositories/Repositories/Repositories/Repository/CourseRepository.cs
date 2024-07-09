@@ -131,5 +131,28 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             return user;
         }
+
+        public async Task<(List<Course>, long)> GetAllPaginationByListId(List<Guid> guids, int pageNumber, int pageSize, string sortField, int sortOrder)
+        {
+            var queryable = base.ApplySort(sortField, sortOrder);
+
+            // Điều kiện lọc từng bước
+            if (queryable.Any())
+            {
+                queryable = queryable.Where(x => guids.Contains(x.Id));
+            }
+            var totalOrigin = queryable.Count();
+
+            // Lọc theo trang
+            queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
+
+            var courses = await queryable.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
+
+            return (courses, totalOrigin);
+        }
     }
 }
