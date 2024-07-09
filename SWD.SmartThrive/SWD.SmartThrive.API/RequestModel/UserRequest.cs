@@ -35,6 +35,5 @@ namespace SWD.SmartThrive.API.RequestModel
 
         public string? RoleName { get; set; }
 
-        public Guid? LocationId { get; set; }
     }
 }

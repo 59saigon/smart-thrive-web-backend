@@ -40,7 +40,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             var result = await queryable
                 .Include(m => m.Role)
-                .Include(m => m.Location)
                 .Include(m => m.Students).SingleOrDefaultAsync();
 
             return result;
@@ -55,7 +54,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             return await queryable
                 .Include(m => m.Role)
-                .Include(m => m.Location)
                 .Include(m => m.Students).ToListAsync();
         }
 
@@ -119,10 +117,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                     queryable = queryable.Where(m => m.RoleId == user.RoleId);
                 }
 
-                if (user.LocationId != Guid.Empty && user.LocationId != null)
-                {
-                    queryable = queryable.Where(m => m.LocationId == user.LocationId);
-                }
             }
 
             var totalOrigin = queryable.Count();
@@ -132,7 +126,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             var users = await queryable
                 .Include(m => m.Role)
-                .Include(m => m.Location)
                 .Include(m => m.Students).ToListAsync();
 
             return (users, totalOrigin);

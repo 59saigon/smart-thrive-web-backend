@@ -67,17 +67,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                     queryable = queryable.Where(m => m.IsApproved == Course.IsApproved);
                 }
 
-
-                if (Course.ProviderId != Guid.Empty && Course.LocationId != null)
-               {
-                    queryable = queryable.Where(m => m.ProviderId == Course.ProviderId);
-               }
-
-                if (Course.LocationId != Guid.Empty && Course.LocationId != null)
-                {
-                    queryable = queryable.Where(m => m.LocationId == Course.LocationId);
-                }
-
                 if (Course.SubjectId != Guid.Empty && Course.SubjectId != null)
                 {
                     queryable = queryable.Where(m => m.SubjectId == Course.SubjectId);

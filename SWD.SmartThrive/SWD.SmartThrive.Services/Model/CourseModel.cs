@@ -9,7 +9,7 @@ namespace SWD.SmartThrive.Services.Model
 
         public Guid? ProviderId { get; set; }
 
-        public Guid? LocationId { get; set; }
+        public string? Address { get; set; }
 
         public Guid? Code { get; set; }
 
@@ -32,8 +32,6 @@ namespace SWD.SmartThrive.Services.Model
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-
-        public LocationModel? Location { get; set; }
 
         public SubjectModel? Subject { get; set; }
 

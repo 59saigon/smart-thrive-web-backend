@@ -28,11 +28,7 @@ namespace SWD.SmartThrive.Services.Model
 
         public Guid RoleId { get; set; }
 
-        public Guid? LocationId { get; set; }
-
         public RoleModel? Role { get; set; }
-
-        public LocationModel? Location { get; set; }
 
         public ProviderModel? Provider { get; set; }
 

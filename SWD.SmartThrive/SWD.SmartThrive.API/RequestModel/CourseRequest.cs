@@ -14,7 +14,7 @@ namespace SWD.SmartThrive.API.RequestModel
 
         public Guid? ProviderId { get; set; }
 
-        public Guid? LocationId { get; set; }
+        public string? Address { get; set; }
 
         public Guid? Code { get; set; }
 

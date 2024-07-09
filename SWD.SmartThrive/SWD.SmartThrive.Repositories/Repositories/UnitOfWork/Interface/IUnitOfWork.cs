@@ -8,7 +8,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.UnitOfWork.Interface
         ICategoryRepository CategoryRepository { get; }
         ICourseRepository CourseRepository { get; }
         ICourseXPackageRepository CourseXPackageRepository { get; }
-        ILocationRepository LocationRepository { get; }
         IOrderRepository OrderRepository { get; }
         IPackageRepository PackageRepository { get; }
         IRoleRepository RoleRepository { get; }
