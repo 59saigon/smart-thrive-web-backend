@@ -21,8 +21,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.UnitOfWork.Repository
 
         public ICourseXPackageRepository CourseXPackageRepository => GetRepository<ICourseXPackageRepository>();
 
-        public ILocationRepository LocationRepository => GetRepository<ILocationRepository>();
-
         public IOrderRepository OrderRepository => GetRepository<IOrderRepository>();
 
         public IPackageRepository PackageRepository => GetRepository<IPackageRepository>();

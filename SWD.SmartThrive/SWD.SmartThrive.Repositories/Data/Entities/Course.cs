@@ -10,9 +10,9 @@ namespace SWD.SmartThrive.Repositories.Data.Entities
 
         public Guid? ProviderId { get; set; }
 
-        public Guid? LocationId { get; set; }
+        public string? Address { get; set; }
 
-        public Guid? Code { get; set; }
+        public string? Code { get; set; }
 
         public string? CourseName { get; set; }
 
@@ -33,8 +33,6 @@ namespace SWD.SmartThrive.Repositories.Data.Entities
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-
-        public virtual Location? Location { get; set; }
 
         public virtual Subject? Subject { get; set; }
 

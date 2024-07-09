@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD.SmartThrive.Repositories.Data;
 
@@ -11,9 +12,11 @@ using SWD.SmartThrive.Repositories.Data;
 namespace SWD.SmartThrive.Repositories.Migrations
 {
     [DbContext(typeof(STDbContext))]
-    partial class STDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240709064417_FixAddressTypeString")]
+    partial class FixAddressTypeString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

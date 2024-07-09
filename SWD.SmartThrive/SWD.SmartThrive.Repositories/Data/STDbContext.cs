@@ -32,7 +32,6 @@ namespace SWD.SmartThrive.Repositories.Data
 
         #region Dbset
         public virtual DbSet<User> Users { get; set; } = null!;
-        public virtual DbSet<Location> Locations { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Course> Courses { get; set; } = null!;
@@ -76,11 +75,6 @@ namespace SWD.SmartThrive.Repositories.Data
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.RoleId)
                 .HasConstraintName("FK_User_Role");
-
-                e.HasOne(x => x.Location)
-               .WithMany(x => x.Users)
-               .HasForeignKey(x => x.LocationId)
-               .HasConstraintName("FK_User_Location");
             });
             modelBuilder.Entity<Provider>(e =>
             {
@@ -109,21 +103,6 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.ToTable("Role");
                 e.HasKey(x => x.Id);
                 e.Property(x => x.RoleName).IsRequired();
-
-                e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
-                e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
-                e.Property(x => x.IsDeleted);
-            });
-
-            modelBuilder.Entity<Location>(e =>
-            {
-                e.ToTable("Location");
-                e.HasKey(x => x.Id);
-                e.Property(x => x.City);
-                e.Property(x => x.District);
-                e.Property(x => x.Ward);
 
                 e.Property(x => x.CreatedBy);
                 e.Property(x => x.CreatedDate).HasColumnType("date");
@@ -199,6 +178,7 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.TotalSessions);
                 e.Property(x => x.TotalSlots);
                 e.Property(x => x.IsApproved);
+                e.Property(x => x.Address);
                 e.Property(x => x.IsActive);
                 e.Property(x => x.StartDate).HasColumnType("date");
                 e.Property(x => x.EndDate).HasColumnType("date");
@@ -209,10 +189,6 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.LastUpdatedDate).HasColumnType("date");
                 e.Property(x => x.IsDeleted);
 
-                e.HasOne(x => x.Location)
-                .WithMany(x => x.Courses)
-                .HasForeignKey(x => x.LocationId)
-                .HasConstraintName("FK_Location_Course");
 
 
                 e.HasOne(x => x.Subject)
