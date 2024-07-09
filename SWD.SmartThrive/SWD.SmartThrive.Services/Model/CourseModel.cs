@@ -11,7 +11,7 @@ namespace SWD.SmartThrive.Services.Model
 
         public string? Address { get; set; }
 
-        public Guid? Code { get; set; }
+        public string? Code { get; set; }
 
         public string? CourseName { get; set; }
 

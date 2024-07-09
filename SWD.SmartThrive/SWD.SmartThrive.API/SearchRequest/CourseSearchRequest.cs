@@ -2,7 +2,7 @@
 {
     public class CourseSearchRequest
     {
-        public Guid? Code { get; set; }
+        public string? Code { get; set; }
 
         public string? CourseName { get; set; }
     }
