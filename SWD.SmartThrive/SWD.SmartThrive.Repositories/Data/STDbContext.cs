@@ -193,11 +193,11 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.Code);
                 e.Property(x => x.CourseName);
-                e.Property(x => x.Sold_product);
+                e.Property(x => x.SoldCourses);
                 e.Property(x => x.Description);
                 e.Property(x => x.Price).HasColumnType("decimal(18,2)");
-                e.Property(x => x.Quantity);
-                e.Property(x => x.TotalSlot);
+                e.Property(x => x.TotalSessions);
+                e.Property(x => x.TotalSlots);
                 e.Property(x => x.IsApproved);
                 e.Property(x => x.IsActive);
                 e.Property(x => x.StartDate).HasColumnType("date");
