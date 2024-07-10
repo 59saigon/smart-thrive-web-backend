@@ -8,6 +8,7 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
         Task<User> FindUsernameOrEmail(User user);
         Task<List<User>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<User> GetById(Guid id);
+        Task<User> GetUserByEmail(User user);
         Task<(List<User>, long)> Search(User user, int pageNumber, int pageSize, string sortField, int sortOrder);
     }
 }

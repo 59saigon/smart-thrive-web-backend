@@ -115,6 +115,26 @@ namespace SWD.SmartThrive.API.Controllers
             };
         }
 
+        [AllowAnonymous]
+        [HttpGet("get-by-email/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var userModel = await _service.GetUserByEmail(new UserModel { Email = email});
+
+                return userModel switch
+                {
+                    null => Ok(new ItemResponse<UserModel>(ConstantMessage.NotFound)),
+                    not null => Ok(new ItemResponse<UserModel>(ConstantMessage.Success, userModel))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            };
+        }
+
         [HttpPost("add")]
         public async Task<IActionResult> AddUser(UserRequest user)
         {
