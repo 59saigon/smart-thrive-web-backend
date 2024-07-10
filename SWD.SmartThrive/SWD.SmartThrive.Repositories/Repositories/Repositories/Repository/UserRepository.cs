@@ -30,9 +30,25 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 );
             }
 
-            if (!queryable.Any())
+            queryable = queryable.Include(entity => entity.Role);
+            
+
+            var result = await queryable
+                .Include(m => m.Role)
+                .Include(m => m.Students).SingleOrDefaultAsync();
+
+            return result;
+        }
+        
+        public async Task<User> GetUserByEmail(User user)
+        {
+            var queryable = base.GetQueryable();
+            queryable = queryable.Where(entity => !entity.IsDeleted);
+
+            if (!string.IsNullOrEmpty(user.Email))
             {
-                return null;
+                queryable = queryable.Where(entity => user.Email.ToLower() == entity.Email.ToLower()
+                );
             }
 
             queryable = queryable.Include(entity => entity.Role);

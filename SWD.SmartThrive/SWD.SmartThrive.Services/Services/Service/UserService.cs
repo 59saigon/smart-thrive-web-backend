@@ -195,11 +195,17 @@ namespace SWD.SmartThrive.Services.Services.Service
             return token;
         }
 
-        public async Task<UserModel> GetUserByEmailOrUsername(UserModel userModel)
+        public async Task<UserModel?> GetUserByEmailOrUsername(UserModel userModel)
         {
             var user = await _repository.FindUsernameOrEmail(_mapper.Map<User>(userModel));
             return _mapper.Map<UserModel>(user);
         }
-        
+
+        public async Task<UserModel?> GetUserByEmail(UserModel userModel)
+        {
+            var user = await _repository.GetUserByEmail(_mapper.Map<User>(userModel));
+            return _mapper.Map<UserModel>(user);
+        }
+
     }
 }

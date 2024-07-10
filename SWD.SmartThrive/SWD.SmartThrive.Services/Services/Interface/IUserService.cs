@@ -26,7 +26,8 @@ namespace SWD.SmartThrive.Services.Services.Interface
 
         public JwtSecurityToken CreateToken(UserModel userModel);
 
-        public Task<UserModel> GetUserByEmailOrUsername(UserModel userModel);
+        public Task<UserModel?> GetUserByEmailOrUsername(UserModel userModel);
+        public Task<UserModel?> GetUserByEmail(UserModel userModel);
         
     }
 }
