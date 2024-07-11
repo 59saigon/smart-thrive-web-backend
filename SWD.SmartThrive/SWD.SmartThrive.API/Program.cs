@@ -1,28 +1,27 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SWD.SmartThrive.API.Tool.Mapping;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SWD.SmartThrive.Repositories.Data;
 using SWD.SmartThrive.Repositories.Repositories.Base;
 using SWD.SmartThrive.Repositories.Repositories.Repositories.Interface;
 using SWD.SmartThrive.Repositories.Repositories.Repositories.Repository;
 using SWD.SmartThrive.Repositories.Repositories.UnitOfWork.Interface;
 using SWD.SmartThrive.Repositories.Repositories.UnitOfWork.Repository;
-using SWD.SmartThrive.Services.Base;
 using SWD.SmartThrive.Services.Services.Interface;
 using SWD.SmartThrive.Services.Services.Service;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using SWD.SmartThrive.API.Tool.Mapping;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -45,23 +44,12 @@ builder.Services.AddSwaggerGen(options =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
-                }
+                },
             },
             new string[]{}
         }
     });
 });
-
-var options = new JsonSerializerOptions()
-{
-    AllowTrailingCommas = true
-};
-
-#region Add-Cors
-
-#endregion
-
-#region Add-DbContext
 
 builder.Services.AddDbContext<STDbContext>(options =>
 {
@@ -69,13 +57,8 @@ builder.Services.AddDbContext<STDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
-#endregion
-
-#region Add-AutoMapper
 builder.Services.AddAutoMapper(typeof(Mapper));
-#endregion
 
-#region Add-Scoped
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -103,51 +86,50 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICourseXPackageService, CouseXPackageService>();
 
 builder.Services.AddHttpContextAccessor();
-#endregion
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddCors(options =>
-    {
 
-        options.AddDefaultPolicy(
-            policy =>
-            {
-                policy.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-            });
-    });
-}
-#region Config-Authentication_Authorization
-builder.Services.AddAuthentication(x =>
+builder.Services.AddCors(options =>
 {
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(options =>
+.AddJwtBearer(options =>
+{
+    options.Audience = "http://localhost:4200/";
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = true;
+
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.Audience = "http://localhost:4200/";
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = true;
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration.GetValue<string>("AppSettings:Token"))),
+        ClockSkew = TimeSpan.Zero
+    };
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                builder.Configuration.GetValue<string>("AppSettings:Token"))),
-            ClockSkew = TimeSpan.Zero
-        };
+    options.Configuration = new OpenIdConnectConfiguration();
+})
+.AddGoogle(options =>
+{
+    IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
 
-        options.Configuration = new OpenIdConnectConfiguration();
-    });
+    options.ClientId = googleAuthNSection["ClientId"];
+    options.ClientSecret = googleAuthNSection["ClientSecret"];
+});
 
 builder.Services.AddAuthorization();
-#endregion
-
-
 
 var app = builder.Build();
 
