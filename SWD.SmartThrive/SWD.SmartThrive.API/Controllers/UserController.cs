@@ -284,5 +284,40 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [AllowAnonymous]
+        // POST api/<AuthController>
+        [HttpPost("register-with-another")]
+        public async Task<IActionResult> RegisterWithAnother([FromBody] UserRequest userRequest)
+        {
+            try
+            {
+                UserModel _userModel = await _service.GetUserByEmailOrUsername(_mapper.Map<UserModel>(userRequest));
+
+                if (_userModel != null)
+                {
+                    return Ok(new ItemResponse<UserModel>(ConstantMessage.Duplicate));
+                }
+
+                RoleModel roleModel = await _roleService.GetRoleByName(userRequest.RoleName);
+
+                UserModel userModelMapping = _mapper.Map<UserModel>(userRequest);
+
+                userModelMapping.RoleId = roleModel.Id;
+                userModelMapping.Password = userRequest.Password;
+
+                UserModel userModel = await _service.Register(userModelMapping);
+
+                return userModel switch
+                {
+                    null => Ok(new ItemResponse<UserModel>(ConstantMessage.NotFound)),
+                    not null => Ok(new ItemResponse<UserModel>(ConstantMessage.Success, userModel))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

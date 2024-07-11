@@ -55,7 +55,7 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.Username).IsRequired();
                 e.Property(x => x.Email).IsRequired();
-                e.Property(x => x.Password).IsRequired();
+                e.Property(x => x.Password);
                 e.Property(x => x.Status);
                 e.Property(x => x.Address);
                 e.Property(x => x.FirstName);
