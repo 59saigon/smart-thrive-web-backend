@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -12,6 +13,7 @@ using SWD.SmartThrive.Services.Model;
 using SWD.SmartThrive.Services.Services.Interface;
 using SWD.SmartThrive.Services.Services.Service;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SWD.SmartThrive.API.Controllers
 {
@@ -224,31 +226,61 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [AllowAnonymous]
         [HttpPost("login-with-another")]
         public async Task<IActionResult> LoginWithAnother([FromBody] UserVerifyEmail userVerifyEmail)
         {
             try
             {
-                if(!userVerifyEmail.Email_verified)
+                var payload = await VerifyGoogleToken(userVerifyEmail.GoogleToken);
+                if (payload == null)
                 {
-                    return Ok(new LoginResponse<UserModel>(ConstantMessage.Fail, null, null
-                , null));
+                    return Ok(new LoginResponse<UserModel>(null, null, null, "Invalid Google Token"));
+                }
+                UserModel user = null;
+                user = await _service.GetUserByEmail(new UserModel { Email = payload.Email });
+                if (user == null)
+                {
+                    // register 
+                    RoleModel roleModel = await _roleService.GetRoleByName("Buyer");
+
+                    UserModel userModel = new UserModel
+                    {
+                        Username = payload.Subject,
+                        Email = payload.Email,
+                        FirstName = payload.GivenName,
+                        LastName = payload.FamilyName,
+                        FullName = payload.Name,
+                        RoleId = roleModel.Id,
+                    };
+
+                    user = await _service.Register(userModel);
                 }
 
-                var userModel = await _service.GetUserByEmail(new UserModel { Email = userVerifyEmail.Email });
+                // Create JWT token
+                JwtSecurityToken token = _service.CreateToken(user);
 
-                JwtSecurityToken token = _service.CreateToken(userModel);
-
-                return Ok(new LoginResponse<UserModel>(ConstantMessage.Success, userModel, new JwtSecurityTokenHandler().WriteToken(token)
+                return Ok(new LoginResponse<UserModel>(ConstantMessage.Success, user, new JwtSecurityTokenHandler().WriteToken(token)
                 , token.ValidTo.ToString()));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { Message = ex.Message });
             }
         }
+
+        private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(string token)
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string> { "311399879185-vic40gludgaeulfo790m0h48h1cvul7u.apps.googleusercontent.com" }
+            };
+
+            GoogleJsonWebSignature.Payload payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+            return payload;
+        }
+
 
         [AllowAnonymous]
         // POST api/<AuthController>
@@ -258,41 +290,6 @@ namespace SWD.SmartThrive.API.Controllers
             try
             {
                 UserModel _userModel =  await _service.GetUserByEmailOrUsername(_mapper.Map<UserModel>(userRequest));
-
-                if (_userModel != null)
-                {
-                    return Ok(new ItemResponse<UserModel>(ConstantMessage.Duplicate));
-                }
-
-                RoleModel roleModel = await _roleService.GetRoleByName(userRequest.RoleName);
-
-                UserModel userModelMapping = _mapper.Map<UserModel>(userRequest);
-
-                userModelMapping.RoleId = roleModel.Id;
-                userModelMapping.Password = userRequest.Password;
-
-                UserModel userModel = await _service.Register(userModelMapping);
-
-                return userModel switch
-                {
-                    null => Ok(new ItemResponse<UserModel>(ConstantMessage.NotFound)),
-                    not null => Ok(new ItemResponse<UserModel>(ConstantMessage.Success, userModel))
-                };
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [AllowAnonymous]
-        // POST api/<AuthController>
-        [HttpPost("register-with-another")]
-        public async Task<IActionResult> RegisterWithAnother([FromBody] UserRequest userRequest)
-        {
-            try
-            {
-                UserModel _userModel = await _service.GetUserByEmailOrUsername(_mapper.Map<UserModel>(userRequest));
 
                 if (_userModel != null)
                 {

@@ -176,7 +176,7 @@ namespace SWD.SmartThrive.Services.Services.Service
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Name, userModel.Username),
+                new Claim(JwtRegisteredClaimNames.Sub, userModel.Username),
             };
             // Conditional addition of claim based on function result
             if (!string.IsNullOrEmpty(userModel.Email))

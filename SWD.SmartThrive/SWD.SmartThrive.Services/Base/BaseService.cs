@@ -142,7 +142,7 @@ namespace SWD.SmartThrive.Services.Base
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
             var emailClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "email"); // Hoặc bất kỳ claim nào chứa Email
-            var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "name"); // Hoặc bất kỳ claim nào chứa Email
+            var usernameClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "sub"); // Hoặc bất kỳ claim nào chứa Email
             return (emailClaim?.Value, usernameClaim?.Value);
         }
     }
