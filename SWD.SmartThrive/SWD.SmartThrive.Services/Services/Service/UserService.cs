@@ -17,7 +17,7 @@ using System.Text;
 
 namespace SWD.SmartThrive.Services.Services.Service
 {
-    
+
 
     public class UserService : BaseService<User>, IUserService
     {
@@ -38,11 +38,11 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<bool> Add(UserModel userModel)
         {
-            userModel.DOB = userModel.DOB.Value.ToLocalTime();
+            userModel.DOB = userModel.DOB != null ? userModel.DOB.Value.ToLocalTime() : null;
             var user = _mapper.Map<User>(userModel);
             user.Password = userModel.Password;
             var setUser = await SetBaseEntityToCreateFunc(user);
-            
+
             return await _repository.Add(setUser);
         }
 
@@ -78,7 +78,7 @@ namespace SWD.SmartThrive.Services.Services.Service
         public async Task<List<UserModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var users = await _repository.GetAllPagination(pageNumber, pageSize, sortField, sortOrder);
-            
+
             if (!users.Any())
             {
                 return null;
@@ -86,11 +86,11 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return _mapper.Map<List<UserModel>>(users);
         }
-        
+
         public async Task<List<UserModel>?> GetAll()
         {
             var users = await _repository.GetAll();
-            
+
             if (!users.Any())
             {
                 return null;
@@ -115,8 +115,8 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<UserModel?> GetById(Guid id)
         {
-            var user = await _repository.GetById(id);  
-            
+            var user = await _repository.GetById(id);
+
             if (user == null)
             {
                 return null;
@@ -155,8 +155,11 @@ namespace SWD.SmartThrive.Services.Services.Service
 
         public async Task<UserModel> Register(UserModel userModel)
         {
-            userModel.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
-            
+            if (userModel.Password != null)
+            {
+                userModel.Password = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+            }
+
             bool isUser = await Add(userModel);
 
             UserModel _userModel = await GetUserByEmailOrUsername(userModel);
