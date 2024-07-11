@@ -224,6 +224,31 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [AllowAnonymous]
+        [HttpPost("login-with-another")]
+        public async Task<IActionResult> LoginWithAnother([FromBody] UserVerifyEmail userVerifyEmail)
+        {
+            try
+            {
+                if(!userVerifyEmail.Email_verified)
+                {
+                    return Ok(new LoginResponse<UserModel>(ConstantMessage.Fail, null, null
+                , null));
+                }
+
+                var userModel = await _service.GetUserByEmail(new UserModel { Email = userVerifyEmail.Email });
+
+                JwtSecurityToken token = _service.CreateToken(userModel);
+
+                return Ok(new LoginResponse<UserModel>(ConstantMessage.Success, userModel, new JwtSecurityTokenHandler().WriteToken(token)
+                , token.ValidTo.ToString()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [AllowAnonymous]
         // POST api/<AuthController>

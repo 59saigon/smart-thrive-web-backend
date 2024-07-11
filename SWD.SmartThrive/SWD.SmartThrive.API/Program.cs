@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SWD.SmartThrive.API.Tool.Mapping;
@@ -58,14 +59,6 @@ var options = new JsonSerializerOptions()
 
 #region Add-Cors
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials());
-});
 #endregion
 
 #region Add-DbContext
@@ -111,7 +104,20 @@ builder.Services.AddScoped<ICourseXPackageService, CouseXPackageService>();
 
 builder.Services.AddHttpContextAccessor();
 #endregion
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
 
+        options.AddDefaultPolicy(
+            policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+    });
+}
 #region Config-Authentication_Authorization
 builder.Services.AddAuthentication(x =>
 {
@@ -120,6 +126,7 @@ builder.Services.AddAuthentication(x =>
 })
     .AddJwtBearer(options =>
     {
+        options.Audience = "http://localhost:4200/";
         options.SaveToken = true;
         options.RequireHttpsMetadata = true;
 
@@ -128,15 +135,19 @@ builder.Services.AddAuthentication(x =>
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = false,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 builder.Configuration.GetValue<string>("AppSettings:Token"))),
             ClockSkew = TimeSpan.Zero
         };
+
+        options.Configuration = new OpenIdConnectConfiguration();
     });
 
 builder.Services.AddAuthorization();
 #endregion
+
+
 
 var app = builder.Build();
 
@@ -148,7 +159,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors();
 
 app.UseAuthentication();
 
