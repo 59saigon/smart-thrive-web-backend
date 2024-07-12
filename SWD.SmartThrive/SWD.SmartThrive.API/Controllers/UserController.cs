@@ -245,6 +245,9 @@ namespace SWD.SmartThrive.API.Controllers
                     // register 
                     RoleModel roleModel = await _roleService.GetRoleByName("Buyer");
 
+                    // Lấy base64 của ảnh
+                    string base64Image = await GetBase64ImageFromUrl(payload.Picture);
+
                     UserModel userModel = new UserModel
                     {
                         Username = payload.Subject,
@@ -253,6 +256,7 @@ namespace SWD.SmartThrive.API.Controllers
                         LastName = payload.FamilyName,
                         FullName = payload.Name,
                         RoleId = roleModel.Id,
+                        Picture = base64Image 
                     };
 
                     user = await _service.Register(userModel);
@@ -269,6 +273,19 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+        private async Task<string> GetBase64ImageFromUrl(string imageUrl)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync(imageUrl);
+                response.EnsureSuccessStatusCode();
+
+                var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                return Convert.ToBase64String(imageBytes);
+            }
+        }
+
 
         private async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(string token)
         {

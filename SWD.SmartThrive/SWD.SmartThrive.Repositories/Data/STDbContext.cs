@@ -61,6 +61,7 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.FirstName);
                 e.Property(x => x.LastName);
                 e.Property(x => x.FullName);
+                e.Property(x => x.Picture);
                 e.Property(x => x.DOB).HasColumnType("date");
                 e.Property(x => x.Gender);
                 e.Property(x => x.Phone);
