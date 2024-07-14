@@ -28,7 +28,7 @@ namespace SWD.SmartThrive.Services.Services.Service
             var entity = await _repository.GetByCourseIdAndPackageId(PackageModel.CourseId, PackageModel.PackageId);
             if (entity != null) { return false; }
             var Cr = _mapper.Map<CourseXPackage>(PackageModel);
-            var cr = await SetBaseEntityToCreateFuncMany(Cr);
+            var cr = await SetBaseEntityToCreateFunc(Cr);
             return await _repository.Add(cr);
         }
 
