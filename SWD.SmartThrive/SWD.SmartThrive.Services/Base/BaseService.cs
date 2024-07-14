@@ -51,6 +51,7 @@ namespace SWD.SmartThrive.Services.Base
             var user = await GetUserInfo();
             if (user != null)
             {
+                // đã đăng nhập
                 entity.Id = Guid.NewGuid();
                 entity.CreatedBy = user.Email;
                 entity.CreatedDate = DateTime.Now;
@@ -59,26 +60,7 @@ namespace SWD.SmartThrive.Services.Base
                 entity.IsDeleted = false;
             } else
             {
-                entity.CreatedDate = DateTime.Now;
-                entity.IsDeleted = false;
-            }
-
-            return entity;
-        }
-        public async Task<TEntity> SetBaseEntityToCreateFuncMany(TEntity entity)
-        {
-
-            var user = await GetUserInfo();
-            if (user != null)
-            {
-                entity.CreatedBy = user.Email;
-                entity.CreatedDate = DateTime.Now;
-                entity.LastUpdatedBy = user.Email;
-                entity.LastUpdatedDate = entity.CreatedDate;
-                entity.IsDeleted = false;
-            }
-            else
-            {
+                entity.Id= Guid.NewGuid();
                 entity.CreatedDate = DateTime.Now;
                 entity.IsDeleted = false;
             }
