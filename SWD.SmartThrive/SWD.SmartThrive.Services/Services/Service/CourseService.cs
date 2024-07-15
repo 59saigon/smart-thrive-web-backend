@@ -80,6 +80,18 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return _mapper.Map<CourseModel>(Course);
         }
+        
+        public async Task<List<CourseModel>> GetAllByProviderId(Guid providerId)
+        {
+            var courses = await _repository.GetAllByProviderId(providerId);
+
+            if (!courses.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<CourseModel>>(courses);
+        }
 
         public async Task<List<CourseModel>?> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
