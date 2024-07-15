@@ -30,11 +30,9 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 );
             }
 
-            queryable = queryable.Include(entity => entity.Role);
-            
-
             var result = await queryable
                 .Include(m => m.Role)
+                .Include(m => m.Provider)
                 .Include(m => m.Students).SingleOrDefaultAsync();
 
             return result;
@@ -51,11 +49,9 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 );
             }
 
-            queryable = queryable.Include(entity => entity.Role);
-            
-
             var result = await queryable
                 .Include(m => m.Role)
+                .Include(m => m.Provider)
                 .Include(m => m.Students).SingleOrDefaultAsync();
 
             return result;
