@@ -120,6 +120,18 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
             return user;
         }
+        
+        public async new Task<List<Course>> GetAllByProviderId(Guid providerId)
+        {
+            var query = GetQueryable(m => m.ProviderId == providerId);
+            var providers = await query.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
+
+            return providers;
+        }
 
         public async Task<(List<Course>, long)> GetAllPaginationByListId(List<Guid> guids, int pageNumber, int pageSize, string sortField, int sortOrder)
         {

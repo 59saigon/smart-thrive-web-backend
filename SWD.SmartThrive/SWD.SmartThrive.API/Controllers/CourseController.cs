@@ -8,6 +8,7 @@ using SWD.SmartThrive.API.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using SWD.SmartThrive.Services.Services.Service;
 using SWD.SmartThrive.API.SearchRequest;
+using SWD.SmartThrive.Repositories.Data.Entities;
 
 namespace SWD.SmartThrive.API.Controllers
 {
@@ -59,6 +60,30 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     null => Ok(new ItemResponse<CourseModel>(ConstantMessage.NotFound)),
                     not null => Ok(new ItemResponse<CourseModel>(ConstantMessage.Success, courseModel))
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            };
+        }
+        
+        [HttpGet("get-all-by-provider-id/{providerId}")]
+        public async Task<IActionResult> GetAllByProviderId(Guid providerId)
+        {
+            try
+            {
+                if (providerId == Guid.Empty)
+                {
+                    return BadRequest("Id is empty");
+                }
+                var courseModels = await _service.GetAllByProviderId(providerId);
+
+                return courseModels switch
+                {
+                    null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Fail, null)),
+                    not null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Success, courseModels))
                 };
             }
             catch (Exception ex)
