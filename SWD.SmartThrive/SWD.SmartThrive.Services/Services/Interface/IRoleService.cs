@@ -10,5 +10,6 @@ namespace SWD.SmartThrive.Services.Services.Interface
     public interface IRoleService
     {
         public Task<RoleModel> GetRoleByName(string roleName);
+        Task<List<RoleModel>> GetAll();
     }
 }

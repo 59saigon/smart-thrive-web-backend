@@ -22,6 +22,18 @@ namespace SWD.SmartThrive.Services.Services.Service
             _roleRepository = unitOfWork.RoleRepository;
         }
 
+        public async Task<List<RoleModel>> GetAll()
+        {
+            var roles = await _roleRepository.GetAll();
+
+            if (!roles.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<RoleModel>>(roles);
+        }
+
         public async Task<RoleModel> GetRoleByName(string roleName)
         {
             if (roleName == null || roleName != "Buyer" || roleName != "Staff" || roleName != "Admin" || roleName != "Provider")
