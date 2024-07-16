@@ -228,6 +228,35 @@ namespace SWD.SmartThrive.Repositories.Repositories.Base
             return queryable;
         }
 
+        public IQueryable<TEntity> ApplySortHasCondition(string sortField, int sortOrder, Expression<Func<TEntity, bool>> predicate)
+        {
+            // Get the base queryable
+            var queryable = GetQueryable(predicate);
+
+            if (queryable.Any())
+            {
+                var parameter = Expression.Parameter(typeof(TEntity), "o");
+                var property = typeof(TEntity).GetProperty(sortField, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                if (property == null)
+                {
+                    // If the property doesn't exist, default to sorting by Id
+                    property = typeof(TEntity).GetProperty("CreatedDate");
+                }
+
+                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+                var orderByExp = Expression.Lambda(propertyAccess, parameter);
+
+                string methodName = sortOrder == 1 ? "OrderBy" : "OrderByDescending";
+                var resultExp = Expression.Call(typeof(Queryable), methodName, new Type[] { typeof(TEntity), property.PropertyType },
+                    queryable.Expression, Expression.Quote(orderByExp));
+
+                queryable = queryable.Provider.CreateQuery<TEntity>(resultExp);
+            }
+
+            return queryable;
+        }
+
         #endregion
     }
 }
