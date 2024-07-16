@@ -16,5 +16,6 @@ namespace SWD.SmartThrive.Services.Services.Interface
 
         public Task<long> GetTotalCount();
         Task<List<CourseModel>> GetAllByProviderId(Guid providerId);
+        Task<(List<CourseModel>?, long)> GetAllPaginationByProviderId(Guid providerId, int pageNumber, int pageSize, string sortField, int sortOrder);
     }
 }

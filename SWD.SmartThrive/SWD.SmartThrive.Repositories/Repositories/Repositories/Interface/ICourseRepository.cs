@@ -11,5 +11,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
         Task<(List<Course>, long)> GetAllPaginationByListId(List<Guid> guids, int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<Course?> GetById(Guid id);
         Task<List<Course>> GetAllByProviderId(Guid providerId);
+        Task<(List<Course>, long)> GetAllPaginationByProviderId(Guid providerId, int pageNumber, int pageSize, string sortField, int sortOrder);
     }
 }

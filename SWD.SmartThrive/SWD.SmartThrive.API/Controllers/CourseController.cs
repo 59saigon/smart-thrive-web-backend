@@ -199,7 +199,27 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             };
         }
-        
+
+        [HttpPost("get-all-pagination-by-provider-id")]
+        public async Task<IActionResult> GetAllPaginationByProviderId(Guid providerId, [FromBody] PaginatedRequest paginatedRequest)
+        {
+            try
+            {
+                var courses = await _service.GetAllPaginationByProviderId(providerId, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField, paginatedRequest.SortOrder.Value);
+
+                return courses.Item1 switch
+                {
+                    null => Ok(new PaginatedListResponse<CourseModel>(ConstantMessage.NotFound, courses.Item1, courses.Item2, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField)),
+                    not null => Ok(new PaginatedListResponse<CourseModel>(ConstantMessage.Success, courses.Item1, courses.Item2, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField))
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            };
+        }
+
         [HttpPost("get-all-pagination-by-list-id")]
         public async Task<IActionResult> GetAllCoures(PaginatedRequest<List<Guid>> paginatedRequest)
         {

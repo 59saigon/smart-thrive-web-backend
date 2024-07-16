@@ -31,6 +31,22 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
                 .ToListAsync();
         }
 
+        public async Task<(List<Course>, long)> GetAllPaginationByProviderId(Guid providerId,int pageNumber, int pageSize, string sortField, int sortOrder)
+        {
+            var queryable = base.ApplySortHasCondition(sortField, sortOrder, m => m.ProviderId == providerId);
+            var totalOrigin = queryable.Count();
+            // Lọc theo trang
+            queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
+
+            var courses = await queryable.Include(m => m.Sessions)
+                .Include(m => m.CourseXPackages)
+                .Include(m => m.Subject)
+                .Include(m => m.Provider)
+                .ToListAsync();
+
+            return (courses, totalOrigin);
+        }
+
         public async Task<(List<Course>, long)> Search(Course Course, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var queryable = base.ApplySort(sortField, sortOrder);
