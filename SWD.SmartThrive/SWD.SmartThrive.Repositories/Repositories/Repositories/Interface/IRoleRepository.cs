@@ -3,7 +3,7 @@ using SWD.SmartThrive.Repositories.Repositories.Base;
 
 namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
 {
-    public interface IRoleRepository : IBaseRepository
+    public interface IRoleRepository : IBaseRepository<Role>
     {
         Task<Role> GetRoleByName(string name);
     }
