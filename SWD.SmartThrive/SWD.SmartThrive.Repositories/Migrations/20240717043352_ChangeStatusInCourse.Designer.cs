@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWD.SmartThrive.Repositories.Data;
 
@@ -11,9 +12,11 @@ using SWD.SmartThrive.Repositories.Data;
 namespace SWD.SmartThrive.Repositories.Migrations
 {
     [DbContext(typeof(STDbContext))]
-    partial class STDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717043352_ChangeStatusInCourse")]
+    partial class ChangeStatusInCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -46,7 +49,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -73,16 +76,13 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -91,7 +91,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -103,7 +103,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -140,7 +140,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -149,7 +149,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<Guid>("PackageId")
                         .HasColumnType("uniqueidentifier");
@@ -177,7 +177,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -189,7 +189,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<Guid>("PackageId")
                         .HasColumnType("uniqueidentifier");
@@ -221,10 +221,10 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
@@ -236,7 +236,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("PackageName")
                         .IsRequired()
@@ -246,7 +246,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -276,7 +276,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -285,7 +285,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -312,7 +312,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -321,7 +321,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -346,7 +346,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -358,10 +358,10 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("LearnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("SessionName")
                         .IsRequired()
@@ -388,10 +388,10 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
@@ -403,7 +403,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("StudentName")
                         .HasColumnType("nvarchar(max)");
@@ -432,7 +432,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -441,7 +441,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
@@ -468,10 +468,10 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -499,7 +499,7 @@ namespace SWD.SmartThrive.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
