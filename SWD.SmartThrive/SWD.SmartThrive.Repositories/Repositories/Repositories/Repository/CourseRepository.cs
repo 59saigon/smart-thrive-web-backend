@@ -74,15 +74,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
             //        queryable = queryable.Where(m => m.DOB.Value.Date == user.DOB.Value.Date);
             //    }
 
-                if (Course.IsActive.HasValue)
-                {
-                    queryable = queryable.Where(m => m.IsActive == Course.IsActive);
-               }
-                if (Course.IsApproved.HasValue)
-                {
-                    queryable = queryable.Where(m => m.IsApproved == Course.IsApproved);
-                }
-
                 if (Course.SubjectId != Guid.Empty && Course.SubjectId != null)
                 {
                     queryable = queryable.Where(m => m.SubjectId == Course.SubjectId);

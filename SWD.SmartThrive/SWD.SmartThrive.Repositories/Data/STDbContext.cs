@@ -62,14 +62,14 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.LastName);
                 e.Property(x => x.FullName);
                 e.Property(x => x.Picture);
-                e.Property(x => x.DOB).HasColumnType("date");
+                e.Property(x => x.DOB);
                 e.Property(x => x.Gender);
                 e.Property(x => x.Phone);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
                 e.HasOne(x => x.Role)
@@ -86,9 +86,9 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Website);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
                 modelBuilder.Entity<User>()
@@ -106,9 +106,9 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.RoleName).IsRequired();
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
             });
 
@@ -119,12 +119,12 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.StudentName);
                 e.Property(x => x.Gender);
-                e.Property(x => x.DOB).HasColumnType("date");
+                e.Property(x => x.DOB);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
                 e.HasOne(x => x.User)
@@ -141,9 +141,9 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.CategoryName);
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
             });
 
@@ -154,9 +154,9 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.SubjectName);
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
 
@@ -178,16 +178,16 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Price).HasColumnType("decimal(18,2)");
                 e.Property(x => x.TotalSessions);
                 e.Property(x => x.TotalSlots);
-                e.Property(x => x.IsApproved);
-                e.Property(x => x.Address);
+                e.Property(x => x.Status);
                 e.Property(x => x.IsActive);
-                e.Property(x => x.StartDate).HasColumnType("date");
-                e.Property(x => x.EndDate).HasColumnType("date");
+                e.Property(x => x.Address);
+                e.Property(x => x.StartDate);
+                e.Property(x => x.EndDate);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
 
@@ -211,14 +211,14 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.SessionName);
-                e.Property(x => x.LearnDate).HasColumnType("date");
+                e.Property(x => x.LearnDate);
                 e.Property(x => x.Title);
                 e.Property(x => x.Description);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
 
@@ -234,16 +234,16 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWId()");
                 e.Property(x => x.PackageName);
-                e.Property(x => x.StartDate).HasColumnType("date");
-                e.Property(x => x.EndDate).HasColumnType("date");
+                e.Property(x => x.StartDate);
+                e.Property(x => x.EndDate);
                 e.Property(x => x.QuantityCourse);
                 e.Property(x => x.TotalPrice).HasColumnType("decimal(18,2)");
                 e.Property(x => x.IsActive);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
                 e.HasOne(x => x.Student)
@@ -272,9 +272,9 @@ namespace SWD.SmartThrive.Repositories.Data
                      .OnDelete(DeleteBehavior.Restrict); // Specify NO ACTION on delete;
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
             });
 
@@ -290,9 +290,9 @@ namespace SWD.SmartThrive.Repositories.Data
                 e.Property(x => x.Status);
 
                 e.Property(x => x.CreatedBy);
-                e.Property(x => x.CreatedDate).HasColumnType("date");
+                e.Property(x => x.CreatedDate);
                 e.Property(x => x.LastUpdatedBy);
-                e.Property(x => x.LastUpdatedDate).HasColumnType("date");
+                e.Property(x => x.LastUpdatedDate);
                 e.Property(x => x.IsDeleted);
 
                 e.HasOne(x => x.Package)

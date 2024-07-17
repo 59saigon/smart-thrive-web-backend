@@ -26,9 +26,9 @@ namespace SWD.SmartThrive.Repositories.Data.Entities
 
         public int? TotalSessions { get; set; }
 
-        public bool? IsApproved { get; set; }
+        public string? Status { get; set; }
 
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         public DateTime? StartDate { get; set; }
 
