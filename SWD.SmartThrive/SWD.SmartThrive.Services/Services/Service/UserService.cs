@@ -12,6 +12,8 @@ using SWD.SmartThrive.Services.Base;
 using SWD.SmartThrive.Services.Model;
 using SWD.SmartThrive.Services.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -28,6 +30,9 @@ namespace SWD.SmartThrive.Services.Services.Service
         private readonly IConfiguration _configuration;
 
         private DateTime countDown = DateTime.Now.AddDays(0.5);
+
+        private static readonly Dictionary<string, (string Otp, DateTime Expiry)> OtpStore = new();
+
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IHttpContextAccessor _httpContextAccessor) : base(mapper, unitOfWork, _httpContextAccessor)
         {
@@ -57,6 +62,30 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             userModel.DOB = userModel.DOB.Value.ToLocalTime();
             _mapper.Map(userModel, entity);
+            entity = await SetBaseEntityToUpdateFunc(entity);
+
+            return await _repository.Update(entity);
+        }
+        
+        public async Task<bool> UpdatePassword(UserModel userModel)
+        {
+            var entity = await _repository.GetById(userModel.Id);
+
+            if (entity == null)
+            {
+                return false;
+            }
+            var newPassword = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+            userModel.DOB = userModel.DOB.Value.ToLocalTime();
+
+            _mapper.Map(userModel, entity);
+
+            if (!string.IsNullOrEmpty(userModel.Password))
+            {
+                // Example: Hashing the password before saving
+                entity.Password = newPassword;
+            }
+            
             entity = await SetBaseEntityToUpdateFunc(entity);
 
             return await _repository.Update(entity);
@@ -152,6 +181,68 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return userModel;
         }
+
+        public string GenerateOTP()
+        {
+            Random random = new Random();
+            return random.Next(1000, 9999).ToString();
+        }
+
+        public void SendEmail(string email, string otp)
+        {
+            try
+            {
+                var fromAddress = new MailAddress("sonnh1106.se@gmail.com");
+                var toAddress = new MailAddress(email);
+                const string frompass = "nnmf adgp zygw rhcz";
+                const string subject = "OTP code";
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, frompass),
+                    Timeout = 200000
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = otp,
+                    IsBodyHtml = false,
+                })
+                {
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public void StoreOtp(string email, string otp)
+        {
+            var expiry = DateTime.UtcNow.AddMinutes(5); // OTP expires in 5 minutes
+            OtpStore[email] = (otp, expiry);
+        }
+
+        public bool VerifyOtp(string email, string otp)
+        {
+            if (OtpStore.ContainsKey(email))
+            {
+                var (storedOtp, expiry) = OtpStore[email];
+                if (expiry > DateTime.UtcNow && storedOtp == otp)
+                {
+                    OtpStore.Remove(email); // Remove OTP after successful verification
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         public async Task<UserModel> Register(UserModel userModel)
         {

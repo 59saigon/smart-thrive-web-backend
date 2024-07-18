@@ -5,5 +5,7 @@
         public string? Code { get; set; }
 
         public string? CourseName { get; set; }
+
+        public string? Status { get; set; }
     }
 }

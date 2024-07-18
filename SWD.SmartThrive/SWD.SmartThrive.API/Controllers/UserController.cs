@@ -123,7 +123,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                var userModel = await _service.GetUserByEmail(new UserModel { Email = email});
+                var userModel = await _service.GetUserByEmail(new UserModel { Email = email });
 
                 return userModel switch
                 {
@@ -228,6 +228,90 @@ namespace SWD.SmartThrive.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendOTP(OtpEmailRequest otpEmailRequest)
+        {
+            try
+            {
+                var otp = _service.GenerateOTP();
+                _service.SendEmail(otpEmailRequest.Email.ToLower(), otp);
+                _service.StoreOtp(otpEmailRequest.Email.ToLower(), otp);
+                return Ok(new { message = "OTP sent successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verify-otp")]
+        public IActionResult VerifyOTP(OtpEmailRequest otpEmailRequest)
+        {
+            try
+            {
+                if (_service.VerifyOtp(otpEmailRequest.Email.ToLower(), otpEmailRequest.Otp))
+                {
+                    return Ok(new { valid = true });
+                }
+                else
+                {
+                    return Ok(new { valid = false });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Otp) || string.IsNullOrEmpty(request.NewPassword))
+                {
+                    return Ok(new BaseResponse(false, "Email, OTP, and new password are required."));
+                }
+
+
+                // get by email
+                var userModel = await _service.GetUserByEmail(new UserModel { Email = request.Email });
+
+                if (userModel != null)
+                {
+                    if (string.IsNullOrEmpty(userModel.Password))
+                    {
+                        return Ok(new BaseResponse(false, "This account just only login by google!"));
+                    }
+                    else
+                    {
+                        userModel.Password = request.NewPassword;
+                        var isUser = await _service.UpdatePassword(userModel);
+
+                        return isUser switch
+                        {
+                            true => Ok(new BaseResponse(isUser, ConstantMessage.Success)),
+                            _ => Ok(new BaseResponse(isUser, ConstantMessage.Fail))
+                        };
+                    }
+                }
+                else
+                {
+                    return Ok(new BaseResponse(false, "User not found."));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [AllowAnonymous]
         [HttpPost("login-with-another")]
         public async Task<IActionResult> LoginWithAnother([FromBody] UserVerifyEmail userVerifyEmail)
         {
@@ -256,7 +340,7 @@ namespace SWD.SmartThrive.API.Controllers
                         LastName = payload.FamilyName,
                         FullName = payload.Name,
                         RoleId = roleModel.Id,
-                        Picture = base64Image 
+                        Picture = base64Image
                     };
 
                     user = await _service.Register(userModel);
@@ -306,7 +390,7 @@ namespace SWD.SmartThrive.API.Controllers
         {
             try
             {
-                UserModel _userModel =  await _service.GetUserByEmailOrUsername(_mapper.Map<UserModel>(userRequest));
+                UserModel _userModel = await _service.GetUserByEmailOrUsername(_mapper.Map<UserModel>(userRequest));
 
                 if (_userModel != null)
                 {

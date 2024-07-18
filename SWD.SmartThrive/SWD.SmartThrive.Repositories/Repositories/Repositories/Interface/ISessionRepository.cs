@@ -9,6 +9,6 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Interface
         Task<(List<Session>, long)> Search(Session Session, int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<Session?> GetById(Guid id);
         Task<List<Session>> GetAllByCourseId(Guid courseId);
-
+        Task<List<Session>> GetAllByCourseIdForProvider(Guid courseId);
     }
 }

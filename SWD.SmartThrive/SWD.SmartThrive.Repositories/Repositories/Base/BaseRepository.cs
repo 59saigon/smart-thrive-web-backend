@@ -199,10 +199,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Base
             return result;
         }
 
-        public IQueryable<TEntity> ApplySort(string sortField, int sortOrder)
+        public IQueryable<TEntity> ApplySort(IQueryable<TEntity> queryable,string sortField, int sortOrder)
         {
-            // Get the base queryable
-            var queryable = GetQueryable();
 
             if (queryable.Any())
             {

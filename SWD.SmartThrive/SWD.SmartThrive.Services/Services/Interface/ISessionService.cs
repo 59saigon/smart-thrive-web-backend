@@ -14,5 +14,6 @@ namespace SWD.SmartThrive.Services.Services.Interface
         Task<SessionModel?> GetById(Guid id);
         Task<(List<SessionModel>?, long)> Search(SessionModel model, int pageNumber, int pageSize, string sortField, int sortOrder);
         Task<long> GetTotalCount();
+        Task<List<SessionModel>?> GetAllByCourseIdForProvider(Guid courseId);
     }
 }

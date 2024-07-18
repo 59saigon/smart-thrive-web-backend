@@ -60,6 +60,25 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet("get-all-by-course-id-for-provider/{courseId}")]
+        public async Task<IActionResult> GetAllByCourseIdForProvider(Guid courseId)
+        {
+            try
+            {
+                var sessions = await _service.GetAllByCourseIdForProvider(courseId);
+
+                return sessions switch
+                {
+                    null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Fail, null)),
+                    not null => Ok(new ItemListResponse<SessionModel>(ConstantMessage.Success, sessions))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost("get-all-pagination")]
         public async Task<IActionResult> GetAllPagination(PaginatedRequest paginatedRequest)
