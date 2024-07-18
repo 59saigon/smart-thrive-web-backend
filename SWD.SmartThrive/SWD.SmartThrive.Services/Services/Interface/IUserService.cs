@@ -28,6 +28,10 @@ namespace SWD.SmartThrive.Services.Services.Interface
 
         public Task<UserModel?> GetUserByEmailOrUsername(UserModel userModel);
         public Task<UserModel?> GetUserByEmail(UserModel userModel);
-        
+        bool VerifyOtp(string email, string otp);
+        void SendEmail(string email, string otp);
+        void StoreOtp(string email, string otp);
+        string GenerateOTP();
+        Task<bool> UpdatePassword(UserModel userModel);
     }
 }

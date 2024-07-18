@@ -44,6 +44,25 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet("get-all-pending-status")]
+        public async Task<IActionResult> GetAllPendingStatus()
+        {
+            try
+            {
+                var courses = await _service.GetAllPendingStatus();
+
+                return courses switch
+                {
+                    null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Fail, null)),
+                    not null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Success, courses))
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("get-by-id/{id}")]
         public async Task<IActionResult> GetCourse(Guid id)
@@ -68,7 +87,7 @@ namespace SWD.SmartThrive.API.Controllers
                 return BadRequest(ex.Message);
             };
         }
-        
+
         [HttpGet("get-all-by-provider-id/{providerId}")]
         public async Task<IActionResult> GetAllByProviderId(Guid providerId)
         {
@@ -231,6 +250,26 @@ namespace SWD.SmartThrive.API.Controllers
                 {
                     null => Ok(new PaginatedListResponse<CourseModel>(ConstantMessage.NotFound, courses.Item1, courses.Item2, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField)),
                     not null => Ok(new PaginatedListResponse<CourseModel>(ConstantMessage.Success, courses.Item1, courses.Item2, paginatedRequest.PageNumber, paginatedRequest.PageSize, paginatedRequest.SortField))
+                };
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            };
+        }
+
+        [HttpPost("get-all-except-list-id-with-actived")]
+        public async Task<IActionResult> GetAllExceptListId(PaginatedRequest<List<Guid>> paginatedRequest)
+        {
+            try
+            {
+                var courses = await _service.GetAllExceptListId(paginatedRequest.Result);
+
+                return courses switch
+                {
+                    null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Fail, null)),
+                    not null => Ok(new ItemListResponse<CourseModel>(ConstantMessage.Success, courses))
                 };
             }
             catch (Exception ex)

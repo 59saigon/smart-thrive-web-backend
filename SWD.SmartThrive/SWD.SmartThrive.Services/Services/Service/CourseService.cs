@@ -69,6 +69,18 @@ namespace SWD.SmartThrive.Services.Services.Service
             return _mapper.Map<List<CourseModel>>(Courses);
         }
 
+        public async Task<List<CourseModel>> GetAllPendingStatus()
+        {
+            var Courses = await _repository.GetAllPendingStatus();
+
+            if (!Courses.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<CourseModel>>(Courses);
+        }
+
         public async Task<CourseModel?> GetById(Guid id)
         {
             var Course = await _repository.GetById(id);
@@ -104,8 +116,8 @@ namespace SWD.SmartThrive.Services.Services.Service
 
             return _mapper.Map<List<CourseModel>>(courses);
         }
-        
-        public async Task<(List<CourseModel>?, long)> GetAllPaginationByProviderId(Guid providerId,int pageNumber, int pageSize, string sortField, int sortOrder)
+
+        public async Task<(List<CourseModel>?, long)> GetAllPaginationByProviderId(Guid providerId, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
             var coursesWithTotalOrigin = await _repository.GetAllPaginationByProviderId(providerId, pageNumber, pageSize, sortField, sortOrder);
 
@@ -143,6 +155,18 @@ namespace SWD.SmartThrive.Services.Services.Service
             var courseModels = _mapper.Map<List<CourseModel>>(coursesWithTotalOrigin.Item1);
 
             return (courseModels, coursesWithTotalOrigin.Item2);
+        }
+        public async Task<List<CourseModel>?> GetAllExceptListId(List<Guid> guids)
+        {
+            var coursesWithTotalOrigin = await _repository.GetAllExceptListId(guids);
+
+            if (!coursesWithTotalOrigin.Any())
+            {
+                return null;
+            }
+            var courseModels = _mapper.Map<List<CourseModel>>(coursesWithTotalOrigin);
+
+            return courseModels;
         }
     }
 }

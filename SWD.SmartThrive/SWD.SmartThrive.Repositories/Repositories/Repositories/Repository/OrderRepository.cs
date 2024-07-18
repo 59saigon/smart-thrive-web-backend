@@ -18,7 +18,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
         public async Task<List<Order>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            var queryable = base.ApplySort(sortField, sortOrder);
+            var queryable = GetQueryable();
+            queryable = base.ApplySort(queryable, sortField, sortOrder);
 
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
@@ -28,7 +29,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
         public async Task<(List<Order>, long)> Search(Order Order, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            var queryable = base.ApplySort(sortField, sortOrder);
+            var queryable = GetQueryable();
+            queryable = base.ApplySort(queryable, sortField, sortOrder);
 
             // Điều kiện lọc từng bước
             if (queryable.Any())

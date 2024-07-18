@@ -16,7 +16,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
         public async Task<List<Session>> GetAllPagination(int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            var queryable = base.ApplySort(sortField, sortOrder);
+            var queryable = GetQueryable();
+            queryable = base.ApplySort(queryable, sortField, sortOrder);
 
             // Lọc theo trang
             queryable = GetQueryablePagination(queryable, pageNumber, pageSize);
@@ -27,7 +28,8 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
 
         public async Task<(List<Session>, long)> Search(Session Session, int pageNumber, int pageSize, string sortField, int sortOrder)
         {
-            var queryable = base.ApplySort(sortField, sortOrder);
+            var queryable = GetQueryable();
+            queryable = base.ApplySort(queryable, sortField, sortOrder);
 
             // Điều kiện lọc từng bước
             if (queryable.Any())
@@ -99,6 +101,12 @@ namespace SWD.SmartThrive.Repositories.Repositories.Repositories.Repository
         public async Task<List<Session>> GetAllByCourseId(Guid courseId)
         {
            var sessions = await GetQueryable(m => m.CourseId == courseId).Include(m => m.Course).ToListAsync();
+            return sessions;
+        }
+        
+        public async Task<List<Session>> GetAllByCourseIdForProvider(Guid courseId)
+        {
+           var sessions = await GetQueryable(m => m.CourseId == courseId).Where(m => !m.IsDeleted).Include(m => m.Course).ToListAsync();
             return sessions;
         }
     }
