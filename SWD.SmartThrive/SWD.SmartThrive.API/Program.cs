@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SWD.SmartThrive.Repositories.Data;
 using SWD.SmartThrive.Repositories.Repositories.Base;
 using SWD.SmartThrive.Repositories.Repositories.Repositories.Interface;
@@ -87,9 +89,9 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://smart-thrive-web-frontend.vercel.app")
+        policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -102,7 +104,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Audience = "http://localhost:4200/";
+    options.Audience = "https://smart-thrive-web-frontend.vercel.app/";
     options.SaveToken = true;
     options.RequireHttpsMetadata = true;
 
@@ -111,11 +113,13 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+        ValidateIssuerSigningKey = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             builder.Configuration.GetValue<string>("AppSettings:Token"))),
         ClockSkew = TimeSpan.Zero
     };
+
+    options.Configuration = new OpenIdConnectConfiguration();
 })
 .AddGoogle(options =>
 {
@@ -137,7 +141,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowFrontend");
+app.UseCors();
 
 app.UseAuthentication();
 
