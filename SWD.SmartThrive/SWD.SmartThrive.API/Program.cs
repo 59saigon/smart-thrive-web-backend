@@ -104,7 +104,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Audience = "https://smart-thrive-web-frontend.vercel.app/";
+    options.Audience = "http://localhost:4200/";
     options.SaveToken = true;
     options.RequireHttpsMetadata = true;
 
